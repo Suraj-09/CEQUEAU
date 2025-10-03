@@ -1,0 +1,6 @@
+# C/C++ source files
+*.cpp text eol=lf
+*.h   text eol=lf
+
+# MATLAB scripts
+*.m text eol=lf
