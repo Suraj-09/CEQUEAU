@@ -422,8 +422,6 @@ void BassinVersant::initialiser(const mxArray* bassinVersant) {
 			int active;
 			double distanceRiviere;
 			double h0;
-			double rayonP = 1.0f;;
-			std::vector<double> niveauxPuits;
 			std::vector<double> debitPompage;
 
 			int nbPuits  = (int)mxGetNumberOfElements(puits);
@@ -435,14 +433,9 @@ void BassinVersant::initialiser(const mxArray* bassinVersant) {
 				MexHelper::chargerValeurs(puits, "h0", h0, i);
 
 				
-				MexHelper::chargerValeurs(puits, "niveauxPuits", niveauxPuits, i);
 				MexHelper::chargerValeurs(puits, "debitPompage", debitPompage, i);
 
-				if (MexHelper::hasField(puits,0,"rayonP")) {
-					MexHelper::chargerValeurs(puits, "rayonP", rayonP, i);
-				}
-
-				puits_[idCE].push_back(PuitsPtr(new Puits(idCE, active, distanceRiviere, h0, rayonP, niveauxPuits, debitPompage)));
+				puits_[idCE].push_back(PuitsPtr(new Puits(idCE, active, distanceRiviere, h0, debitPompage)));
 			}
 		}
 	}

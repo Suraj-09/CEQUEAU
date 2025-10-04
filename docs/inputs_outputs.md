@@ -292,7 +292,6 @@ Structure varies by dam type.
 -   `idCE`: `double` - ID of the corresponding Whole Cell.
 -   `distanceRiviere`: `double` - Distance from the well to the river (m).
 -   `debitPompage`: `[nbPasDeTemps x 1 double]` - Pumping rate (m³/day) for each time step.
--   `niveauxPuits`: `[nbPasDeTemps x 1 double]` - Water level in the well (m) for each time step.
 -   `h0`: `double` - Initial water level in the well (m).
 -   `active`: `double` - Well status (0 = inactive, 1 = active).
 

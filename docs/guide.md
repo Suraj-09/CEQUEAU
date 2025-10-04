@@ -43,8 +43,7 @@ This is important for:
 
 -   **barrage** data (bassinVersant.barrage): **debit**
 
--   **Puits** data (bassinVersant.puits): **debitPompage** and
-    **niveauxPuits**
+-   **Puits** data (bassinVersant.puits): **debitPompage**
 
 The intersect function in Matlab/Octave
 can find the matching date range, which can then be used to extract the
@@ -103,14 +102,12 @@ structPuits(1).idCE = 41; % index of whole square
 structPuits(1).active = 1; % activate the well
 structPuits(1).distanceRiviere = 0; % distance between well and river (m)
 structPuits(1).h0 = 20; % initial water level (m)
-structPuits(1).niveauxPuits = ones(numTimeSteps, 1) * 20; % water level at each timestep (m)
 structPuits(1).debitPompage = Debit_Pomp.Well_1; % pumping rate m3/day at each timestep
 
 structPuits(2).idCE = 1;
 structPuits(2).active = 0; % deactivate the well
 structPuits(2).distanceRiviere = 0; % distance between well and river (m)
 structPuits(2).h0 = 20; % initial water level (m)
-structPuits(2).niveauxPuits = ones(numTimeSteps, 1) * 20; % water level at each timestep (m)
 structPuits(2).debitPompage = Debit_Pomp.Well_2; % pumping rate m3/day at each timestep
 
 StructFinal.bassinVersant.puits = structPuits;

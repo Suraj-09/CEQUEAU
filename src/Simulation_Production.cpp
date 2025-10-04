@@ -151,13 +151,8 @@ int Simulation::calculerBilanReservoirs(int noJour, CarreauEntier& carreauEntier
 
         if (pPtr->getActive() == 1) {
           double Qp = pPtr->getDebitPompageParIndex(idxDelai);
-
           double distanceRiviere = pPtr->getDistanceRiviere();
-
           double niveauInitial = pPtr->getNiveauInitial();
-          double niveauEauSuivant = pPtr->getNiveauPuitsParIndex(idxDelai+1); // ht+1
-          double niveauEau = pPtr->getNiveauPuitsParIndex(idxDelai);          // ht
-          double niveauEauPrecedent = pPtr->getNiveauPuitsParIndex(idxDelai-1); // ht-1
 
           double AICE = 1000000 * bassinVersant_.superficieCarreauEntier();
           
@@ -167,10 +162,7 @@ int Simulation::calculerBilanReservoirs(int noJour, CarreauEntier& carreauEntier
 
           double hauteur_mm = 1000.0 * (Qextrait / AICE);
 
-          double HN_avant_Q = HN_niveauEauNappe;
-          double HN_apres_Q = HN_avant_Q - hauteur_mm;
-          HN_niveauEauNappe = static_cast<float>(HN_apres_Q);
-          
+          HN_niveauEauNappe = static_cast<float>(HN_niveauEauNappe - hauteur_mm);        
           HN_niveauEauNappe = maxf(HN_niveauEauNappe, 0.0f);
 
         } // if (pPtr->getActive() == 1)
@@ -181,7 +173,6 @@ int Simulation::calculerBilanReservoirs(int noJour, CarreauEntier& carreauEntier
     
   } // if (parametres_.option().modulePompage)
 
-  // HN_niveauEauNappe = HN_niveauEauNappe - SNAPB_vidangeBasse + XINF_infiltration;
   float SONAP_eauDisponibleNappe = SNAPB_vidangeBasse + SNAPH_vidangeHaute;
 
   // *** EVAPOTRANSPIRATION ***
