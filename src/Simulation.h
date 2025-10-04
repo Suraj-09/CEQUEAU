@@ -46,6 +46,7 @@ public:
   float niveauEauNappe;
   float niveauEauLacsMarais;
   float evapoPotJour;
+  float ruissellement;
   float production;
   float recharge;
 

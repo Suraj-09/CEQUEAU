@@ -95,9 +95,10 @@ mxArray* Simulation::obtenirEtatsCE(const std::vector<EtatsCarreauxEntiers>& eta
   mxArray** niveauEauSol          = (mxArray**)mxMalloc(m * sizeof(mxArray*)); 
   mxArray** niveauEauNappe        = (mxArray**)mxMalloc(m * sizeof(mxArray*)); 
   mxArray** niveauEauLacsMarais   = (mxArray**)mxMalloc(m * sizeof(mxArray*)); 
-  mxArray** evapoPotJour          = (mxArray**)mxMalloc(m * sizeof(mxArray*)); 
+  mxArray** evapoPotJour          = (mxArray**)mxMalloc(m * sizeof(mxArray*));
+  mxArray** ruissellement         = (mxArray**)mxMalloc(m * sizeof(mxArray*));
   mxArray** production            = (mxArray**)mxMalloc(m * sizeof(mxArray*)); 
-  mxArray** recharge            = (mxArray**)mxMalloc(m * sizeof(mxArray*)); 
+  mxArray** recharge              = (mxArray**)mxMalloc(m * sizeof(mxArray*)); 
 
   for (unsigned int i = 0; i < m; i++) {
     id[i]                    = mxCreateDoubleMatrix(1, n, mxREAL);
@@ -107,12 +108,13 @@ mxArray* Simulation::obtenirEtatsCE(const std::vector<EtatsCarreauxEntiers>& eta
     niveauEauNappe[i]        = mxCreateDoubleMatrix(1, n, mxREAL);
     niveauEauLacsMarais[i]   = mxCreateDoubleMatrix(1, n, mxREAL);
     evapoPotJour[i]          = mxCreateDoubleMatrix(1, n, mxREAL);
+    ruissellement[i]         = mxCreateDoubleMatrix(1, n, mxREAL);
     production[i]            = mxCreateDoubleMatrix(1, n, mxREAL);
-    recharge[i]            = mxCreateDoubleMatrix(1, n, mxREAL);
+    recharge[i]              = mxCreateDoubleMatrix(1, n, mxREAL);
   }
 
   double idCE, iCE, jCE;
-  double niveauSol, niveauNappe, niveauLacsMarais, evapoPot, prod, rech;
+  double niveauSol, niveauNappe, niveauLacsMarais, evapoPot, ruiss, prod, rech;
   int indexCE;
   std::vector<EtatsCarreauxEntiers>::const_iterator tempsIter = etatsPasDeTemps.begin();
   EtatsCarreauxEntiers::const_iterator etatsIter;
@@ -129,6 +131,7 @@ mxArray* Simulation::obtenirEtatsCE(const std::vector<EtatsCarreauxEntiers>& eta
       niveauNappe      = (double)etatsIter->niveauEauNappe;
       niveauLacsMarais = (double)etatsIter->niveauEauLacsMarais;
       evapoPot         = (double)etatsIter->evapoPotJour;
+      ruiss            = (double)etatsIter->ruissellement;
       prod             = (double)etatsIter->production;
       rech             = (double)etatsIter->recharge;
 
@@ -142,8 +145,9 @@ mxArray* Simulation::obtenirEtatsCE(const std::vector<EtatsCarreauxEntiers>& eta
         memcpy((void*)(mxGetPr(niveauEauNappe[i]) + j),        (void*)&niveauNappe,      sizeof(double));
         memcpy((void*)(mxGetPr(niveauEauLacsMarais[i]) + j),   (void*)&niveauLacsMarais, sizeof(double));
         memcpy((void*)(mxGetPr(evapoPotJour[i]) + j),          (void*)&evapoPot,         sizeof(double));
+        memcpy((void*)(mxGetPr(ruissellement[i]) + j),         (void*)&ruiss,            sizeof(double));
         memcpy((void*)(mxGetPr(production[i]) + j),            (void*)&prod,             sizeof(double));
-        memcpy((void*)(mxGetPr(recharge[i]) + j),            (void*)&rech,             sizeof(double));
+        memcpy((void*)(mxGetPr(recharge[i]) + j),              (void*)&rech,             sizeof(double));
         j++;
       }
     }
@@ -151,7 +155,7 @@ mxArray* Simulation::obtenirEtatsCE(const std::vector<EtatsCarreauxEntiers>& eta
   }
 
   const char *nomChamps[] = {"id", "iCarreauEntier", "jCarreauEntier", "niveauEauSol", "niveauEauNappe", 
-                             "niveauEauLacsMarais", "evapoPotJour", "production", "recharge"}; 
+                             "niveauEauLacsMarais", "evapoPotJour", "ruissellement", "production", "recharge"}; 
   int nbChamps = sizeof(nomChamps) / sizeof(char*);
   mxArray* etatsCE = mxCreateStructMatrix(1, m, nbChamps, nomChamps);
 
@@ -163,6 +167,7 @@ mxArray* Simulation::obtenirEtatsCE(const std::vector<EtatsCarreauxEntiers>& eta
     mxSetField(etatsCE, i, "niveauEauNappe",        niveauEauNappe[i]);
     mxSetField(etatsCE, i, "niveauEauLacsMarais",   niveauEauLacsMarais[i]);
     mxSetField(etatsCE, i, "evapoPotJour",          evapoPotJour[i]);
+    mxSetField(etatsCE, i, "ruissellement",         ruissellement[i]);
     mxSetField(etatsCE, i, "production",            production[i]);
     mxSetField(etatsCE, i, "recharge",              recharge[i]);
   }
