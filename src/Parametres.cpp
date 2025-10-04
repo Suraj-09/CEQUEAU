@@ -375,18 +375,15 @@ void Parametres::initialiser(const mxArray* paramExec, const mxArray* paramSimul
     }
 
     if (MexHelper::hasField(pompage, 0, "coeffEmmagasinement_s")) {
-      // mexPrintf("\ncoeffEmmagasinement_s exists \n");
       MexHelper::chargerValeurs(pompage, "coeffEmmagasinement_s"  , pompage_.coeffEmmagasinement);
       validerNombreValeurs("pompage.coeffEmmagasinement_s", (int)pompage_.coeffEmmagasinement.size(), nbCE);
 
       int idx = 1;
       for (float v : pompage_.coeffEmmagasinement) {
-        FILE_LOG (logINFO) << "coeffEmmagasinement_s []" << idx << "] = " <<  v;
         idx++;
       }
 
     } else {
-      // mexPrintf("\ncoeffEmmagasinement_s does not exists \n");
       pompage_.coeffEmmagasinement.push_back(1);
     }
 

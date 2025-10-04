@@ -412,17 +412,28 @@ void BassinVersant::initialiser(const mxArray* bassinVersant) {
 			double distanceRiviere;
 			double h0;
 			std::vector<double> debitPompage;
+			std::vector<double> poids;
 
 			int nbPuits  = (int)mxGetNumberOfElements(puits);
 			for (int i = 0; i < nbPuits; i++) {
 
-				MexHelper::chargerValeurs(puits, "idCE", idCE, i);
+				if (MexHelper::hasField(puits, 0, "idCE")) {
+					MexHelper::chargerValeurs(puits, "idCE", idCE, i);
+				}
+
 				MexHelper::chargerValeurs(puits, "active", active, i);
 				MexHelper::chargerValeurs(puits, "distanceRiviere", distanceRiviere, i);
 				MexHelper::chargerValeurs(puits, "h0", h0, i);
 				MexHelper::chargerValeurs(puits, "debitPompage", debitPompage, i);
+				
+				if (MexHelper::hasField(puits, 0, "W")) {
+					MexHelper::chargerValeurs<double>(puits, "W", poids, i);
+					puits_.push_back(PuitsPtr(new Puits(idCE, active, distanceRiviere, h0, debitPompage, poids)));
+				} else {
+					puits_.push_back(PuitsPtr(new Puits(idCE, active, distanceRiviere, h0, debitPompage)));
+				}
 
-				puits_.push_back(PuitsPtr(new Puits(idCE, active, distanceRiviere, h0, debitPompage)));
+				
 			}
 		}
 	}

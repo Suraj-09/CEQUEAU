@@ -136,8 +136,7 @@ int Simulation::calculerBilanReservoirs(int noJour, CarreauEntier& carreauEntier
   // Soustraire l'eau pompee de l'haute nappe
   float rayon = 0.0f;
   // float recharge = 0.0f;
-  if (parametres_.option().modulePompage) {
-
+  if (parametres_.option().modulePompage == 1) {
     if (!listePuits.empty()) {
       float conductiviteHydraulique = carreauEntier.param().conductiviteHydraulique;
       double coeffPompage = parametres_.pompage().coeffPompage;
@@ -149,7 +148,7 @@ int Simulation::calculerBilanReservoirs(int noJour, CarreauEntier& carreauEntier
       for (PuitsPtr pPtr : listePuits) {
 
         if (pPtr->getIdCE() == carreauEntier.id() && pPtr->getActive() == 1) {
-          
+
           double Qp = pPtr->getDebitPompageParIndex(idxDelai);
           double distanceRiviere = pPtr->getDistanceRiviere();
           double niveauInitial = pPtr->getNiveauInitial();
@@ -172,6 +171,33 @@ int Simulation::calculerBilanReservoirs(int noJour, CarreauEntier& carreauEntier
     } // if (!listePuits.empty())
     
   } // if (parametres_.option().modulePompage)
+    else if (parametres_.option().modulePompage == 2) {
+    if (!listePuits.empty()) {
+      int delai = parametres_.pompage().delai;
+      int idxDelai = indexPasDeTemps - delai;
+
+      for (PuitsPtr pPtr : listePuits) {
+
+          if (pPtr->getActive() == 1) {
+            double Qp = pPtr->getDebitPompageParIndex(idxDelai);
+
+            double poids = pPtr->getPoidsParIdCE(carreauEntier.id());
+            double Qi = poids * Qp; 
+            
+            double AICE = 1000000 * bassinVersant_.superficieCarreauEntier();
+            
+            double hauteur_mm = 1000.0 * (Qi / AICE);
+
+            HN_niveauEauNappe = static_cast<float>(HN_niveauEauNappe - hauteur_mm);
+            HN_niveauEauNappe = maxf(HN_niveauEauNappe, 0.0f);
+
+          } // if (pPtr->getActive() == 1)
+
+        } // for (PuitsPtr pPtr : listePuits)
+        
+     } // if (!listePuits.empty())
+    
+  }
 
   float SONAP_eauDisponibleNappe = SNAPB_vidangeBasse + SNAPH_vidangeHaute;
 
