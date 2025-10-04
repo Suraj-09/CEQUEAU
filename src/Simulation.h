@@ -90,6 +90,8 @@ public:
   float niveauEauLacsMarais[2];
   TypeAssim evapoPotJourType;
   float evapoPotJour[2];
+  TypeAssim ruissellementType;
+  float ruissellement[2];
   TypeAssim productionType;
   float production[2];
 };
