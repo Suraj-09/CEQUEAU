@@ -546,6 +546,7 @@ matError Simulation::chargerEtatsCE(EtatsCarreauxEntiers& etatsCarreauxEntiers)
   mxArray *niveauEauNappe        = MexHelper::mhMxGetField(etatsCE, 0, "niveauEauNappe");
   mxArray *niveauEauLacsMarais   = MexHelper::mhMxGetField(etatsCE, 0, "niveauEauLacsMarais");
   mxArray *evapoPotJour          = MexHelper::mhMxGetField(etatsCE, 0, "evapoPotJour");
+  mxArray *ruissellement         = MexHelper::mhMxGetField(etatsCE, 0, "ruissellement");
   mxArray *production            = MexHelper::mhMxGetField(etatsCE, 0, "production");
 
   if (iCarreauEntier != NULL) {
@@ -558,6 +559,7 @@ matError Simulation::chargerEtatsCE(EtatsCarreauxEntiers& etatsCarreauxEntiers)
     double* niveauEauNappeData        = MexHelper::mhMxGetPr(niveauEauNappe, "niveauEauNappe");
     double* niveauEauLacsMaraisData   = MexHelper::mhMxGetPr(niveauEauLacsMarais, "niveauEauLacsMarais");
     double* evapoPotJourData          = MexHelper::mhMxGetPr(evapoPotJour, "evapoPotJour");
+    double* ruissellementData         = MexHelper::mhMxGetPr(ruissellement, "ruissellement");
     double* productionData            = MexHelper::mhMxGetPr(production, "production");
 
     EtatCarreauEntier etatCarreauEntier;
@@ -569,6 +571,7 @@ matError Simulation::chargerEtatsCE(EtatsCarreauxEntiers& etatsCarreauxEntiers)
       etatCarreauEntier.niveauEauNappe              = (float)niveauEauNappeData[i];
       etatCarreauEntier.niveauEauLacsMarais         = (float)niveauEauLacsMaraisData[i];
       etatCarreauEntier.evapoPotJour                = (float)evapoPotJourData[i];
+      etatCarreauEntier.ruissellement               = (float)ruissellementData[i];
       etatCarreauEntier.production                  = (float)productionData[i];
 
       etatsCarreauxEntiers.push_back(etatCarreauEntier);
