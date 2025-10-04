@@ -143,19 +143,8 @@ const CarreauEntierPtr BassinVersant::trouverCarreauEntierParId(int id) const {
 }
 
 //------------------------------------------------------------------
-const std::map<int, std::vector<PuitsPtr>>& BassinVersant::puits() const {
+const std::vector<PuitsPtr>& BassinVersant::puits() const {
   	return puits_;
-}
-
-//------------------------------------------------------------------
-const std::vector<PuitsPtr>& BassinVersant::puitsParIdCE(int idCE) const {
-    auto it = puits_.find(idCE);
-    if (it != puits_.end()) {
-        return it->second;
-    } else {
-	static const std::vector<PuitsPtr> empty_vector;
-        return empty_vector; // Return a reference to a static empty vector
-    }
 }
 
 //------------------------------------------------------------------
@@ -431,11 +420,9 @@ void BassinVersant::initialiser(const mxArray* bassinVersant) {
 				MexHelper::chargerValeurs(puits, "active", active, i);
 				MexHelper::chargerValeurs(puits, "distanceRiviere", distanceRiviere, i);
 				MexHelper::chargerValeurs(puits, "h0", h0, i);
-
-				
 				MexHelper::chargerValeurs(puits, "debitPompage", debitPompage, i);
 
-				puits_[idCE].push_back(PuitsPtr(new Puits(idCE, active, distanceRiviere, h0, debitPompage)));
+				puits_.push_back(PuitsPtr(new Puits(idCE, active, distanceRiviere, h0, debitPompage)));
 			}
 		}
 	}

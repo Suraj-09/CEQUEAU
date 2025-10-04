@@ -38,14 +38,13 @@ int Simulation::executerProduction(const DateChrono& datePasDeTemps, const int& 
 
   // Boucle carreaux entiers
   for (int indexCE = 0; indexCE < nbCE; indexCE++) {
-    Meteo& meteo = *donneesMeteo_.valeurs()[indexMeteo][indexCE]; 
-    // double donneePompage = pompageEau_.donnees()[indexPompage][indexCE];
+    Meteo& meteo = *donneesMeteo_.valeurs()[indexMeteo][indexCE];
 
     EtatCarreauEntier& etatPrecCarreauEntier = etatsPasDeTempsPrecedent[indexCE]; 
     CarreauEntier& carreauEntier = *bassinVersant_.carreauxEntiers()[indexCE];
     EtatCarreauEntier etatCarreauEntier;
 
-    const std::vector<PuitsPtr>& listePuits = bassinVersant_.puitsParIdCE(carreauEntier.id());
+    std::vector<PuitsPtr> listePuits = bassinVersant_.puits();
   
     float pluieEtFonteDisponible = 0.0, precipitationsModele = 0.0;
     fonte_->calculerFonte(datePasDeTemps, meteo, carreauEntier, precipitationsModele, pluieEtFonteDisponible);
@@ -149,7 +148,8 @@ int Simulation::calculerBilanReservoirs(int noJour, CarreauEntier& carreauEntier
 
       for (PuitsPtr pPtr : listePuits) {
 
-        if (pPtr->getActive() == 1) {
+        if (pPtr->getIdCE() == carreauEntier.id() && pPtr->getActive() == 1) {
+          
           double Qp = pPtr->getDebitPompageParIndex(idxDelai);
           double distanceRiviere = pPtr->getDistanceRiviere();
           double niveauInitial = pPtr->getNiveauInitial();

@@ -81,9 +81,7 @@ public:
   const CarreauEntierPtr trouverCarreauEntierParId(int id) const;
 
   //! Getter liste des puits
-  const std::map<int, std::vector<PuitsPtr>>& puits() const;
-
-  const std::vector<PuitsPtr>& puitsParIdCE(int idCE) const;
+  const std::vector<PuitsPtr>& puits() const;
 
 private:
   int nbCarreauxEntiers_; 
@@ -107,7 +105,7 @@ private:
   //! Liste des CP ayant un barrage.
   std::map<int, bool> listeCpBarrage_;
   //! Liste des puits
-  std::map<int, std::vector<PuitsPtr>> puits_;
+  std::vector<PuitsPtr> puits_;
   
   //! Initialisation des carreaux entiers a partir d'une structure Matlab.
   void initialiserCarreauxEntiers(const mxArray* bassinVersant);
