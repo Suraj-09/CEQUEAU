@@ -46,6 +46,9 @@ int Simulation::assimiler(const DateChrono& datePasDeTemps, EtatsCarreauxEntiers
           AssimilationHelper::assimilerValeur(assimilationsIter->evapoPotJour,
                           assimilationsIter->evapoPotJourType, iterCE->evapoPotJour);
 
+          AssimilationHelper::assimilerValeur(assimilationsIter->ruissellement,
+                          assimilationsIter->ruissellementType, iterCE->ruissellement);
+
           AssimilationHelper::assimilerValeur(assimilationsIter->production,
                           assimilationsIter->productionType, iterCE->production);
 

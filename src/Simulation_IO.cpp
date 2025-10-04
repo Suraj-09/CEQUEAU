@@ -680,13 +680,13 @@ int Simulation::initialiserAssimilations(const mxArray* assimilations)
   size_t nbDonnees, nbDonneesCE, nbDonneesCP, nbDonneesBarrage;
 
   mxArray *etatsCE, *idCE;
-  mxArray *niveauEauSol, *niveauEauNappe, *niveauEauLacsMarais, *evapoPotJour, *production;
+  mxArray *niveauEauSol, *niveauEauNappe, *niveauEauLacsMarais, *evapoPotJour, *ruissellement, *production;
   mxArray *etatsCP, *idCP, *apport, *volume, *debit;
   mxArray *etatsBarrage, *niveau;
 
   double pasDeTempsData, *idCEData;
   double *niveauEauSolData, *niveauEauNappeData, *niveauEauLacsMaraisData;
-  double *evapoPotJourData, *productionData, *idCPData  , *apportData, *volumeData, *debitData, *niveauData;
+  double *evapoPotJourData, *ruissellementData, *productionData, *idCPData  , *apportData, *volumeData, *debitData, *niveauData;
   DateChrono datePasDeTemps;
 
   EtatCarreauEntierAssim etatCarreauEntierAssim;
@@ -729,6 +729,10 @@ int Simulation::initialiserAssimilations(const mxArray* assimilations)
       etatCarreauEntierAssim.evapoPotJourType = AssimilationHelper::obtenirTypeAssim(evapoPotJour);
       evapoPotJourData = mxGetPr(evapoPotJour);
 
+      ruissellement = MexHelper::mhMxGetField(etatsCE, 0, "ruissellement");
+      etatCarreauEntierAssim.ruissellementType = AssimilationHelper::obtenirTypeAssim(ruissellement);
+      ruissellementData = mxGetPr(ruissellement);
+
       production = MexHelper::mhMxGetField(etatsCE, 0, "production");
       etatCarreauEntierAssim.productionType = AssimilationHelper::obtenirTypeAssim(production);
       productionData = mxGetPr(production);
@@ -754,6 +758,9 @@ int Simulation::initialiserAssimilations(const mxArray* assimilations)
 
         AssimilationHelper::obtenirValeursAssim(evapoPotJourData, etatCarreauEntierAssim.evapoPotJourType,
                             j, etatCarreauEntierAssim.evapoPotJour);
+        
+        AssimilationHelper::obtenirValeursAssim(ruissellementData, etatCarreauEntierAssim.ruissellementType, 
+                            j, etatCarreauEntierAssim.ruissellement);
 
         AssimilationHelper::obtenirValeursAssim(productionData, etatCarreauEntierAssim.productionType,
                             j, etatCarreauEntierAssim.production);
