@@ -48,7 +48,6 @@ public:
   float evapoPotJour;
   float ruissellement;
   float production;
-  float recharge;
 
   // QUALITE
   // Donnees necessaires pour les calculs de qualite

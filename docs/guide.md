@@ -80,12 +80,14 @@ The pumping module takes into account the water being pumped out of the
 ground for each whole square (CE) at each timestep. Pumping data is
 provided through data about wells located on the river basin.
 
-To turn on the pumping module, the option must be set to 1. Setting it
+To turn on the pumping module, the option must be set to v1 or v2 depending on the algorithm. Setting it
 to 0 (default) will turn it off.
 
 ```matlab
-StructFinal.parametres.option.modulePompage = 1; % 0 = off, 1 = on
+StructFinal.parametres.option.modulePompage = 2; % 0 = off, 1 = algorithm v1, 2 = algorithm v2
 ```
+
+### Pumping Algorithm v1 (coeffPompage)
 
 Data about water wells is placed within the `bassinVersant` struct. Each
 well needs to have the index of the CE, the distance from the well to
@@ -141,7 +143,7 @@ numCE = numel(StructFinal.bassinVersant.carreauxEntiers);
 StructFinal.parametres.pompage.conductiviteHydraulique_s = ones(1, numCE); % m/day
 ```
 
-### Theory and Equation
+### Algorithm v1 - Theory and Equation
 
 To take into account the wells distance from the river, the radius of
 influence is calculated for each well during pumping. The following
@@ -162,6 +164,54 @@ To adjust the volume of water removed from the reservoir, `coeffPompage`
 ($\gamma$) is used:
 
 $$Q_{extracted} = Q_{i} \times (1 - e^{- \gamma r_{o}})$$
+
+### Pumping Algorithm v2 (Contribution Zones)
+
+Data about water wells is placed within the `bassinVersant` struct. Each
+well needs to have the index of the CE, the distance from the well to
+the river, the initial water level h0, the pumping rate in m^3^ per day, 
+and the weights of each CE in the contribution zone. There is also a variable to
+activate/deactivate the well.
+
+```matlab
+% Initialize the structure to hold all wells
+structPuits = struct();
+numTimeSteps = size(meteo.dates, 1); % Example: Get number of timesteps
+
+structPuits(1).idCE = 41; % index of whole square
+structPuits(1).active = 1; % activate the well
+structPuits(1).distanceRiviere = 0; % distance between well and river (m)
+structPuits(1).h0 = 20; % initial water level (m)
+structPuits(1).debitPompage = Debit_Pomp.Well_1; % pumping rate m3/day at each timestep
+structPuits(1).W = W % [NbreCE x1] double, weights of each CE;
+
+StructFinal.bassinVersant.puits = structPuits;
+```
+
+Other parameters are set within the `parametres` struct.
+
+The `delai` parameter delays the effect of the pumping by the given
+number of timesteps.
+
+The `conductiviteHydraulique_s` is used to specify the hydraulic
+conductivity. A single value can be given to assign the same values to
+all whole squares, or a `1 x number of CE` array can be provided to assign
+a value to each CE.
+
+
+```matlab
+% creating pumping parameter struct
+StructFinal.parametres.pompage = struct();
+StructFinal.parametres.pompage.delai = 1; % Delay in timesteps
+
+% Hydraulic conductivity (K) examples:
+% 1) a single value for all CEs
+StructFinal.parametres.pompage.conductiviteHydraulique_s = 1; % m/day
+
+% 2) a value for each CE, the index indicates the idCE [1 x numCE]
+numCE = numel(StructFinal.bassinVersant.carreauxEntiers);
+StructFinal.parametres.pompage.conductiviteHydraulique_s = ones(1, numCE); % m/day
+```
 
 ### Pumping Code
 

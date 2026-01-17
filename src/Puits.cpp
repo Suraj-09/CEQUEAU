@@ -55,3 +55,19 @@ double Puits::getPoidsParIdCE(int idCE) const {
   return poidsCE[idCE-1];
 } 
 
+double Puits::getConductiviteHydrauliqueCE() const {
+    return conductiviteHydrauliqueCE;
+}
+
+double Puits::getGradientHydrauliqueCE() const {
+  return gradientHydrauliqueCE;
+}
+
+
+void Puits::setConductiviteHydrauliqueCE(double ch) {
+  this->conductiviteHydrauliqueCE = ch;
+}
+
+void Puits::setGradientHydrauliqueCE(double gh) {
+  this->gradientHydrauliqueCE = gh;
+}

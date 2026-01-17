@@ -225,6 +225,10 @@ public:
    void initialiserFichier(std::string nomFichierParamExec, std::string nomFichierParamSimul, int nbCE, int nbCP);
    //! Initialisation des parametres a partir de variables Matlab (mxArray)
    void initialiser(const mxArray* paramExec, const mxArray* paramSimul, int nbCE, int nbCP);
+   //! Initialisation des parametres d'execution
+   void initialiserExecution(const mxArray* paramExec);
+   //! Initialisation des parametres d'options
+   void initialiserOptions(const mxArray* paramSimul);
 
 private:
    DateChrono dateDebut_;

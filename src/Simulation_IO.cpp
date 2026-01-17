@@ -98,7 +98,6 @@ mxArray* Simulation::obtenirEtatsCE(const std::vector<EtatsCarreauxEntiers>& eta
   mxArray** evapoPotJour          = (mxArray**)mxMalloc(m * sizeof(mxArray*));
   mxArray** ruissellement         = (mxArray**)mxMalloc(m * sizeof(mxArray*));
   mxArray** production            = (mxArray**)mxMalloc(m * sizeof(mxArray*)); 
-  mxArray** recharge              = (mxArray**)mxMalloc(m * sizeof(mxArray*)); 
 
   for (unsigned int i = 0; i < m; i++) {
     id[i]                    = mxCreateDoubleMatrix(1, n, mxREAL);
@@ -110,11 +109,10 @@ mxArray* Simulation::obtenirEtatsCE(const std::vector<EtatsCarreauxEntiers>& eta
     evapoPotJour[i]          = mxCreateDoubleMatrix(1, n, mxREAL);
     ruissellement[i]         = mxCreateDoubleMatrix(1, n, mxREAL);
     production[i]            = mxCreateDoubleMatrix(1, n, mxREAL);
-    recharge[i]              = mxCreateDoubleMatrix(1, n, mxREAL);
   }
 
   double idCE, iCE, jCE;
-  double niveauSol, niveauNappe, niveauLacsMarais, evapoPot, ruiss, prod, rech;
+  double niveauSol, niveauNappe, niveauLacsMarais, evapoPot, ruiss, prod;
   int indexCE;
   std::vector<EtatsCarreauxEntiers>::const_iterator tempsIter = etatsPasDeTemps.begin();
   EtatsCarreauxEntiers::const_iterator etatsIter;
@@ -133,7 +131,6 @@ mxArray* Simulation::obtenirEtatsCE(const std::vector<EtatsCarreauxEntiers>& eta
       evapoPot         = (double)etatsIter->evapoPotJour;
       ruiss            = (double)etatsIter->ruissellement;
       prod             = (double)etatsIter->production;
-      rech             = (double)etatsIter->recharge;
 
       // Selection des CE qu'on desire en sortie
       indexCE = (int)idCE - 1;
@@ -147,15 +144,14 @@ mxArray* Simulation::obtenirEtatsCE(const std::vector<EtatsCarreauxEntiers>& eta
         memcpy((void*)(mxGetPr(evapoPotJour[i]) + j),          (void*)&evapoPot,         sizeof(double));
         memcpy((void*)(mxGetPr(ruissellement[i]) + j),         (void*)&ruiss,            sizeof(double));
         memcpy((void*)(mxGetPr(production[i]) + j),            (void*)&prod,             sizeof(double));
-        memcpy((void*)(mxGetPr(recharge[i]) + j),              (void*)&rech,             sizeof(double));
         j++;
       }
     }
     i++;
   }
 
-  const char *nomChamps[] = {"id", "iCarreauEntier", "jCarreauEntier", "niveauEauSol", "niveauEauNappe", 
-                             "niveauEauLacsMarais", "evapoPotJour", "ruissellement", "production", "recharge"}; 
+  const char *nomChamps[] = {"id", "iCarreauEntier", "jCarreauEntier", "niveauEauSol", "niveauEauNappe",
+                             "niveauEauLacsMarais", "evapoPotJour", "ruissellement", "production"};
   int nbChamps = sizeof(nomChamps) / sizeof(char*);
   mxArray* etatsCE = mxCreateStructMatrix(1, m, nbChamps, nomChamps);
 
@@ -169,7 +165,6 @@ mxArray* Simulation::obtenirEtatsCE(const std::vector<EtatsCarreauxEntiers>& eta
     mxSetField(etatsCE, i, "evapoPotJour",          evapoPotJour[i]);
     mxSetField(etatsCE, i, "ruissellement",         ruissellement[i]);
     mxSetField(etatsCE, i, "production",            production[i]);
-    mxSetField(etatsCE, i, "recharge",              recharge[i]);
   }
 
   return etatsCE;

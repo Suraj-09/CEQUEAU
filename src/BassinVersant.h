@@ -41,7 +41,8 @@ public:
   //! Initialisation du bassin versant a partir d'un fichier Matlab.
   void initialiserFichier(const std::string nomFichierintrants);
   //! Initialisation du bassin versant a partir d'un variable Matlab (mxArray)
-  void initialiser(const mxArray* bassinVersant);
+  void initialiser(const mxArray* bassinVersant, ParamOption paramOptions, int nbPasSimulations);
+
 
   //! Getter nomBassinVersant
   std::string nomBassinVersant() const;

@@ -125,12 +125,7 @@ void Parametres::initialiserFichier(std::string nomFichierParamExec, std::string
 }
 #endif
 
-//------------------------------------------------------------------
-void Parametres::initialiser(const mxArray* paramExec, const mxArray* paramSimul, int nbCE, int nbCP)
-{
-  FILE_LOG(logDEBUG) << "Parametres::initialiser(const mxArray* paramExec, const mxArray* paramSimul, int nbCE, int nbCP)";
-  int nbValeurs;
-  
+void Parametres::initialiserExecution(const mxArray* paramExec) {
   double datenum = 730851.0; // Resultat de datenum(2000, 12, 31) en Matlab
   //date dateTest = MexHelper::datenumToDate(&datenum);
 
@@ -153,6 +148,63 @@ void Parametres::initialiser(const mxArray* paramExec, const mxArray* paramSimul
   pValeur  = MexHelper::mhMxGetField(paramExec, 0, "dateFin");
   valeur   = MexHelper::mhMxGetPr(pValeur, "dateFin");
   dateFin_ = MexHelper::datenumToDate(valeur);
+}
+
+//------------------------------------------------------------------
+void Parametres::initialiserOptions(const mxArray* paramSimul)
+{
+  /** option **/
+  mxArray* option = MexHelper::mhMxGetField(paramSimul, 0, "option");
+  MexHelper::chargerValeurs(option, "ipassim", dureeHeuresPasSimulation_);
+  // 24 = 24 heures (1 jour)
+  if (24 % dureeHeuresPasSimulation_ != 0) {
+    std::stringstream erreur;
+    erreur << "Duree du pas de simulation invalide: " << dureeHeuresPasSimulation_ << " heures. Doit etre 1,2,3,4,6,8,12 ou 24";
+    throw std::runtime_error(erreur.str());
+  }
+
+  MexHelper::chargerValeurs(option, "moduleFonte", option_.moduleFonte);
+  MexHelper::chargerValeurs(option, "moduleEvapo", option_.moduleEvapo);
+  MexHelper::chargerValeurs(option, "calculQualite", option_.calculQualite);
+
+  if (MexHelper::hasField(option, 0, "moduleDLI")) {
+      MexHelper::chargerValeurs(option, "moduleDLI", option_.moduleDLI);
+  } else {
+      option_.moduleDLI = 0;
+  }
+
+  if (MexHelper::hasField(option, 0, "logNeigeAjustee")) {
+    MexHelper::chargerValeurs(option, "logNeigeAjustee", option_.logNeigeAjustee);
+  }
+
+  if (MexHelper::hasField(option, 0, "moduleOmbrage")) {
+      MexHelper::chargerValeurs(option, "moduleOmbrage", option_.moduleOmbrage);
+  } else {
+    option_.moduleOmbrage = 0;
+  }
+
+  if (MexHelper::hasField(option, 0, "modulePompage")) {
+      MexHelper::chargerValeurs(option, "modulePompage", option_.modulePompage);
+
+      if (option_.modulePompage != 2) {
+        option_.modulePompage = 0;
+      }
+  } else {
+    option_.modulePompage = 0;
+  }
+
+  if (MexHelper::hasField(option, 0, "moduleOmbrage")) {
+      MexHelper::chargerValeurs(option, "moduleOmbrage", option_.moduleOmbrage);
+  } else {
+    option_.moduleOmbrage = 0;
+  }
+}
+
+//------------------------------------------------------------------
+void Parametres::initialiser(const mxArray* paramExec, const mxArray* paramSimul, int nbCE, int nbCP)
+{
+  FILE_LOG(logDEBUG) << "Parametres::initialiser(const mxArray* paramExec, const mxArray* paramSimul, int nbCE, int nbCP)";
+  int nbValeurs;
 
   // Initialisation des listes de CE et CP qu'on desire en sortie
   std::vector<int> ids;
@@ -196,48 +248,6 @@ void Parametres::initialiser(const mxArray* paramExec, const mxArray* paramSimul
   else {
     // Par defaut on affiche tout
     resultatsIdCP_.assign(nbCP, true);
-  }
-
-  /** option **/
-  mxArray* option = MexHelper::mhMxGetField(paramSimul, 0, "option");
-  MexHelper::chargerValeurs(option, "ipassim", dureeHeuresPasSimulation_);
-  // 24 = 24 heures (1 jour)
-  if (24 % dureeHeuresPasSimulation_ != 0) {
-    std::stringstream erreur;
-    erreur << "Duree du pas de simulation invalide: " << dureeHeuresPasSimulation_ << " heures. Doit etre 1,2,3,4,6,8,12 ou 24";
-    throw std::runtime_error(erreur.str());
-  }
-  MexHelper::chargerValeurs(option, "moduleFonte", option_.moduleFonte);
-  MexHelper::chargerValeurs(option, "moduleEvapo", option_.moduleEvapo);
-  MexHelper::chargerValeurs(option, "calculQualite", option_.calculQualite);
-  
-  
-  if (MexHelper::hasField(option, 0, "moduleDLI")) {
-      MexHelper::chargerValeurs(option, "moduleDLI", option_.moduleDLI);
-  } else {
-      option_.moduleDLI = 0;
-  }
-
-  if (MexHelper::hasField(option, 0, "logNeigeAjustee")) {
-    MexHelper::chargerValeurs(option, "logNeigeAjustee", option_.logNeigeAjustee);
-  }
-
-  if (MexHelper::hasField(option, 0, "moduleOmbrage")) {
-      MexHelper::chargerValeurs(option, "moduleOmbrage", option_.moduleOmbrage);
-  } else {
-    option_.moduleOmbrage = 0;
-  }
-
-  if (MexHelper::hasField(option, 0, "modulePompage")) {
-      MexHelper::chargerValeurs(option, "modulePompage", option_.modulePompage);
-  } else {
-    option_.modulePompage = 0;
-  }
-
-  if (MexHelper::hasField(option, 0, "moduleOmbrage")) {
-      MexHelper::chargerValeurs(option, "moduleOmbrage", option_.moduleOmbrage);
-  } else {
-    option_.moduleOmbrage = 0;
   }
 
   /** sol **/
@@ -364,7 +374,7 @@ void Parametres::initialiser(const mxArray* paramExec, const mxArray* paramSimul
     if (MexHelper::hasField(pompage, 0, "coeffPompage")) {
       MexHelper::chargerValeurs(pompage, "coeffPompage"  , pompage_.coeffPompage);
     } else {
-      pompage_.coeffPompage = -1;
+      pompage_.coeffPompage = 0.0001;
     }
 
     if (MexHelper::hasField(pompage, 0, "conductiviteHydraulique_s")) {

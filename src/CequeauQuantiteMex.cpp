@@ -127,8 +127,14 @@ void mexFunction(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]) {
 		BassinVersant bassinVersant;
 		Parametres parametres;
 
+		FILE_LOG(logINFO) << "Initialisation des parametres d'options";
+		parametres.initialiserExecution(structExecution);
+
+		FILE_LOG(logINFO) << "Initialisation des parametres d'options";
+		parametres.initialiserOptions(structParamSimulation);
+
 		FILE_LOG(logINFO) << "Initialisation du bassin versant";
-		bassinVersant.initialiser(structBassinVersant);
+		bassinVersant.initialiser(structBassinVersant, parametres.option(), parametres.nbPasSimulation());
 
 		FILE_LOG(logINFO) << "Initialisation des parametres";
 		parametres.initialiser(structExecution, structParamSimulation, bassinVersant.nbCarreauxEntiers(), bassinVersant.nbCarreauxPartiels());

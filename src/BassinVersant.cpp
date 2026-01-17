@@ -166,8 +166,6 @@ void BassinVersant::initialiserCarreauxPartiels(const mxArray* bassinVersant) {
 	double hautMoyenneArbre;
 	int azimutCoursEau;
 
-
-
 	mxArray* carreauPartiel = MexHelper::mhMxGetField(bassinVersant, 0, "carreauxPartiels");
 	int nbCP = (int)mxGetNumberOfElements(carreauPartiel);
 
@@ -344,7 +342,7 @@ void BassinVersant::initialiserFichier(const std::string nomFichierintrants) {
 #endif
 
 //------------------------------------------------------------------
-void BassinVersant::initialiser(const mxArray* bassinVersant) {
+void BassinVersant::initialiser(const mxArray* bassinVersant, const ParamOption paramOptions, int nbPasDeTemps) {
 	FILE_LOG(logDEBUG) << "BassinVersant::initialiser(const mxArray* bassinVersant)";
 
 	MexHelper::chargerValeurs(bassinVersant, "nbCpCheminLong", nbCarreauxPartielsCheminLong_);
@@ -405,35 +403,44 @@ void BassinVersant::initialiser(const mxArray* bassinVersant) {
 
 	// Chargement du ou des barrages s'il existe.
 	mxArray* puits = mxGetField(bassinVersant, 0, "puits");
-	if (puits != NULL) {
-		if (mxIsStruct(puits)) {
-			int idCE;
-			int active;
-			double distanceRiviere;
-			double h0;
-			std::vector<double> debitPompage;
-			std::vector<double> poids;
+	if (paramOptions.modulePompage == 1 || paramOptions.modulePompage == 2)  {
+		if (puits != NULL) {
+			if (mxIsStruct(puits)) {
+				int idCE;
+				int active;
+				double distanceRiviere;
+				double h0;
+				std::vector<double> debitPompage;
+				std::vector<double> poids;
 
-			int nbPuits  = (int)mxGetNumberOfElements(puits);
-			for (int i = 0; i < nbPuits; i++) {
+				int nbPuits  = (int)mxGetNumberOfElements(puits);
+				for (int i = 0; i < nbPuits; i++) {
 
-				if (MexHelper::hasField(puits, 0, "idCE")) {
-					MexHelper::chargerValeurs(puits, "idCE", idCE, i);
+					if (MexHelper::hasField(puits, 0, "idCE")) {
+						MexHelper::chargerValeurs(puits, "idCE", idCE, i);
+					}
+
+					MexHelper::chargerValeurs(puits, "active", active, i);
+					MexHelper::chargerValeurs(puits, "distanceRiviere", distanceRiviere, i);
+					MexHelper::chargerValeurs(puits, "h0", h0, i);
+					MexHelper::chargerValeurs(puits, "debitPompage", debitPompage, i);
+
+					if (debitPompage.size() != nbPasDeTemps) {
+						std::stringstream erreur;
+
+						erreur << "Nombre incoherent de donnees de débit de pompage.\n";
+						erreur << "  Nb pas de débit de pompage: " << debitPompage.size() << ", Nb pas de temps simul: " << nbPasDeTemps << std::endl;
+						throw std::runtime_error(erreur.str());
+					}
+
+					if (MexHelper::hasField(puits, 0, "W")) {
+						MexHelper::chargerValeurs<double>(puits, "W", poids, i);
+						puits_.push_back(PuitsPtr(new Puits(idCE, active, distanceRiviere, h0, debitPompage, poids)));
+					} else {
+						puits_.push_back(PuitsPtr(new Puits(idCE, active, distanceRiviere, h0, debitPompage)));
+					}
+
 				}
-
-				MexHelper::chargerValeurs(puits, "active", active, i);
-				MexHelper::chargerValeurs(puits, "distanceRiviere", distanceRiviere, i);
-				MexHelper::chargerValeurs(puits, "h0", h0, i);
-				MexHelper::chargerValeurs(puits, "debitPompage", debitPompage, i);
-				
-				if (MexHelper::hasField(puits, 0, "W")) {
-					MexHelper::chargerValeurs<double>(puits, "W", poids, i);
-					puits_.push_back(PuitsPtr(new Puits(idCE, active, distanceRiviere, h0, debitPompage, poids)));
-				} else {
-					puits_.push_back(PuitsPtr(new Puits(idCE, active, distanceRiviere, h0, debitPompage)));
-				}
-
-				
 			}
 		}
 	}

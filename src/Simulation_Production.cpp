@@ -33,6 +33,13 @@ int Simulation::executerProduction(const DateChrono& datePasDeTemps, const int& 
   int indexPompage = calculerIndexPompage(datePasDeTemps, noPasDeTemps);
   int indexPasDeTemps = calculerIndexMeteo(datePasDeTemps, noPasDeTemps);
 
+  std::vector<PuitsPtr> listePuits = bassinVersant_.puits();
+
+  for (PuitsPtr pPtr : listePuits) {
+    pPtr->setConductiviteHydrauliqueCE(bassinVersant_.carreauxEntiers()[pPtr->getIdCE()]->param().conductiviteHydraulique);
+    pPtr->setGradientHydrauliqueCE(bassinVersant_.carreauxEntiers()[pPtr->getIdCE()]->meanSlope());
+  }
+
   // Variable de travail contenant les etats du pas de temps precedent
   EtatsCarreauxEntiers etatsPasDeTempsPrecedent = bilans_.back(); 
 
@@ -135,7 +142,6 @@ int Simulation::calculerBilanReservoirs(int noJour, CarreauEntier& carreauEntier
 
   // Soustraire l'eau pompee de l'haute nappe
   float rayon = 0.0f;
-  // float recharge = 0.0f;
   if (parametres_.option().modulePompage == 1) {
     if (!listePuits.empty()) {
       float conductiviteHydraulique = carreauEntier.param().conductiviteHydraulique;
@@ -154,14 +160,14 @@ int Simulation::calculerBilanReservoirs(int noJour, CarreauEntier& carreauEntier
           double niveauInitial = pPtr->getNiveauInitial();
 
           double AICE = 1000000 * bassinVersant_.superficieCarreauEntier();
-          
+
           rayon = static_cast<float>(Qp / (2 * PI * conductiviteHydraulique * niveauInitial * gradientHydraulique));
-    
+
           double Qextrait = Qp * (1 - exp(-1 * coeffPompage * rayon));
 
           double hauteur_mm = 1000.0 * (Qextrait / AICE);
 
-          HN_niveauEauNappe = static_cast<float>(HN_niveauEauNappe - hauteur_mm);        
+          HN_niveauEauNappe = static_cast<float>(HN_niveauEauNappe - hauteur_mm);
           HN_niveauEauNappe = maxf(HN_niveauEauNappe, 0.0f);
 
         } // if (pPtr->getActive() == 1)
@@ -169,7 +175,7 @@ int Simulation::calculerBilanReservoirs(int noJour, CarreauEntier& carreauEntier
       } // for (PuitsPtr pPtr : listePuits)
 
     } // if (!listePuits.empty())
-    
+
   } // if (parametres_.option().modulePompage)
     else if (parametres_.option().modulePompage == 2) {
     if (!listePuits.empty()) {
@@ -180,23 +186,30 @@ int Simulation::calculerBilanReservoirs(int noJour, CarreauEntier& carreauEntier
 
           if (pPtr->getActive() == 1) {
             double Qp = pPtr->getDebitPompageParIndex(idxDelai);
+            double distanceRiviere = pPtr->getDistanceRiviere();
+            double niveauInitial = pPtr->getNiveauInitial();
 
-            double poids = pPtr->getPoidsParIdCE(carreauEntier.id());
-            double Qi = poids * Qp; 
-            
-            double AICE = 1000000 * bassinVersant_.superficieCarreauEntier();
-            
-            double hauteur_mm = 1000.0 * (Qi / AICE);
+            rayon = static_cast<float>(Qp / (2 * PI * pPtr->getConductiviteHydrauliqueCE() * niveauInitial * pPtr->getGradientHydrauliqueCE()));
+            if (rayon >= distanceRiviere) {
+              double poids = pPtr->getPoidsParIdCE(carreauEntier.id());
+              double Qi = poids * Qp;
+              double AICE = 1000000 * bassinVersant_.superficieCarreauEntier();
 
-            HN_niveauEauNappe = static_cast<float>(HN_niveauEauNappe - hauteur_mm);
-            HN_niveauEauNappe = maxf(HN_niveauEauNappe, 0.0f);
+              double hauteur_mm = 1000.0 * (Qi / AICE);
+
+              double HN_avant_Q = HN_niveauEauNappe;
+              double HN_apres_Q = HN_avant_Q - hauteur_mm;
+              HN_niveauEauNappe = static_cast<float>(HN_apres_Q);
+              HN_niveauEauNappe = maxf(HN_niveauEauNappe, 0.0f);
+
+            }
 
           } // if (pPtr->getActive() == 1)
 
         } // for (PuitsPtr pPtr : listePuits)
-        
+
      } // if (!listePuits.empty())
-    
+
   }
 
   float SONAP_eauDisponibleNappe = SNAPB_vidangeBasse + SNAPH_vidangeHaute;
@@ -284,7 +297,6 @@ int Simulation::calculerBilanReservoirs(int noJour, CarreauEntier& carreauEntier
   etatCarreauEntier.ruissellement = RIMP_ruissellementSufaceImper + RUISS_ruissellementSurface;
   // Stockage en metres cube
   etatCarreauEntier.production = 1000.0f * CEKM2_superficieKm2 * REST_eauDisponibleCE;
-  etatCarreauEntier.recharge = 0.0f;
 
   // QUALITE
   etatCarreauEntier.Qualite.RUISST = RIMP_ruissellementSufaceImper + RUISS_ruissellementSurface;
