@@ -2,11 +2,11 @@
 // Fichier:  AssimilationHelper.hpp
 //
 // Date creation: 2013-04-04
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #pragma once
@@ -26,7 +26,7 @@ namespace AssimilationHelper {
   //------------------------------------------------------------------
   //                      Definitions
   //------------------------------------------------------------------
-  
+
   //------------------------------------------------------------------
   // assimilerValeur(assimilationsIter->temperature, assimilationsIter->temperatureType, iterCP->temperature);
   //------------------------------------------------------------------
@@ -54,7 +54,7 @@ namespace AssimilationHelper {
     FILE_LOG(logDEBUG) << "Simulation::obtenirTypeAssim(const mxArray* varAssimilation)";
 
     TypeAssim typeAssim;
-  
+
     // Aucune ligne = pas de donnees a assimiler
     // Une ligne = Assimilation par valeurs
     // Deux lignes = Ligne #1 facteurs multiplicatifs
@@ -99,7 +99,7 @@ namespace AssimilationHelper {
       index = indexCol * 2;
       floatTmp = (valeursAssim == NULL ? ASSIMILATION_NO_DATA : (float)valeursAssim[index]);
       valeurs[0] = ((std::isnan(floatTmp) ? ASSIMILATION_NO_DATA : floatTmp));
-  
+
       if (valeurs[0] != ASSIMILATION_NO_DATA) {
         index = 1 + indexCol * 2;
         floatTmp = (float)valeursAssim[index];

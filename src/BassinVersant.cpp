@@ -2,14 +2,14 @@
 // Fichier: BassinVersant.cpp
 //
 // Date creation: 2012-10-01
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
-#include "stdafx.h" 
+#include "stdafx.h"
 #include "BassinVersant.h"
 
 //------------------------------------------------------------------
@@ -184,7 +184,7 @@ void BassinVersant::initialiserCarreauxPartiels(const mxArray* bassinVersant) {
 
 	nbCarreauxPartiels_ = nbCP;
 	carreauxPartiels_.reserve(nbCarreauxPartiels_);
-	// TODO: Here, the names of the field lat-lon must be changed to Latitude, Longitude. 
+	// TODO: Here, the names of the field lat-lon must be changed to Latitude, Longitude.
 	// TODO: Also, the type of latitude and longitude must be float
 	bool possedeLat = MexHelper::hasField(carreauPartiel,0,"lat");
 	bool possedeLon = MexHelper::hasField(carreauPartiel,0,"lon");
@@ -214,7 +214,7 @@ void BassinVersant::initialiserCarreauxPartiels(const mxArray* bassinVersant) {
 		MexHelper::chargerValeurs(carreauPartiel, "indiceFoliaire", indiceFoliaire, -1.0f, k);
 		MexHelper::chargerValeurs(carreauPartiel, "custom_1", custom_1, -1.0f, k);
 		MexHelper::chargerValeurs(carreauPartiel, "custom_2", custom_2, -1.0f, k);
-		
+
 		// This was added to keep the compatibility with old structures
 		if (possedeLat)
 		{
@@ -262,11 +262,11 @@ void BassinVersant::initialiserCarreauxPartiels(const mxArray* bassinVersant) {
 				pctFeuillue,
 				pctConifer,
 				hautMoyenneArbre,
-				azimutCoursEau))); 
-	
+				azimutCoursEau)));
+
 	}
 
-	
+
 }
 
 //------------------------------------------------------------------
@@ -310,7 +310,7 @@ void BassinVersant::initialiserCarreauxEntiers(const mxArray* bassinVersant) {
 		if (possedeSlope) {
 			MexHelper::chargerValeurs(carreauEntier, "meanSlope", meanSlope, k);
 		}
-		
+
 
 		carreauxEntiers_.push_back(CarreauEntierPtr(new CarreauEntier(k + 1, i, j, pctLacRiviere, pctForet, pctMarais, 0, altitude, latitude, longitude, meanSlope)));
 	}
@@ -434,7 +434,7 @@ void BassinVersant::initialiser(const mxArray* bassinVersant) {
 				MexHelper::chargerValeurs(puits, "distanceRiviere", distanceRiviere, i);
 				MexHelper::chargerValeurs(puits, "h0", h0, i);
 
-				
+
 				MexHelper::chargerValeurs(puits, "niveauxPuits", niveauxPuits, i);
 				MexHelper::chargerValeurs(puits, "debitPompage", debitPompage, i);
 
