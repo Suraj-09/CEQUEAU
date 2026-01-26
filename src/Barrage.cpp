@@ -2,20 +2,20 @@
 // Fichier:  Barrage.cpp
 //
 // Date creation: 2012-11-16
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
-#include "stdafx.h" 
-#include "Barrage.h" 
+#include "stdafx.h"
+#include "Barrage.h"
 #include "DateChrono.h"
 
 //------------------------------------------------------------------
 Barrage::Barrage(int idCP, int idCPAval, float volume, const ParamEquation& paramNiveau, const ParamEquation& paramDebit)
-  : typeBarrage_(EVACUATION_CALCULEE), idCP_(idCP), idCPAval_(idCPAval), volume_(volume), paramNiveau_(paramNiveau), 
+  : typeBarrage_(EVACUATION_CALCULEE), idCP_(idCP), idCPAval_(idCPAval), volume_(volume), paramNiveau_(paramNiveau),
     paramDebit_(paramDebit)
 {
   FILE_LOG(logDEBUG) << "Barrage::Barrage_Type2(...)";
@@ -23,9 +23,9 @@ Barrage::Barrage(int idCP, int idCPAval, float volume, const ParamEquation& para
 }
 
 //------------------------------------------------------------------
-Barrage::Barrage(int idCP, int idCPAval, float volume, const ParamEquation& paramNiveau, const ParamEquation& paramVolume, 
+Barrage::Barrage(int idCP, int idCPAval, float volume, const ParamEquation& paramNiveau, const ParamEquation& paramVolume,
                  const std::vector<ParamEquation>& paramDebitInt, const std::vector<InfoEvacuationExt>& paramDebitExt)
-  : typeBarrage_(EVACUATION_CALCULEE_SPECIAL), idCP_(idCP), idCPAval_(idCPAval), volume_(volume), paramNiveau_(paramNiveau), 
+  : typeBarrage_(EVACUATION_CALCULEE_SPECIAL), idCP_(idCP), idCPAval_(idCPAval), volume_(volume), paramNiveau_(paramNiveau),
     paramVolume_(paramVolume), paramDebitEvacuationInt_(paramDebitInt), paramDebitEvacuationExt_(paramDebitExt)
 {
   FILE_LOG(logDEBUG) << "Barrage::Barrage_Type5(...)";
@@ -103,12 +103,12 @@ float Barrage::calculerNiveauAvecVolume(float volume) const
   FILE_LOG(logDEBUG) << "Barrage::calculerNiveauAvecVolume(float volume)";
   // H = A + B * V + C * V**1/2 + D * V**1/3 + E * V**1/4 + F * V**1/5 + CO
 
-  float resultat = paramNiveau_[0] + 
-                   paramNiveau_[1] * volume + 
+  float resultat = paramNiveau_[0] +
+                   paramNiveau_[1] * volume +
                    paramNiveau_[2] * std::pow(volume, 0.50000000f) +
-                   paramNiveau_[3] * std::pow(volume, 0.33333333f) + 
-                   paramNiveau_[4] * std::pow(volume, 0.25000000f) + 
-                   paramNiveau_[5] * std::pow(volume, 0.20000000f) + 
+                   paramNiveau_[3] * std::pow(volume, 0.33333333f) +
+                   paramNiveau_[4] * std::pow(volume, 0.25000000f) +
+                   paramNiveau_[5] * std::pow(volume, 0.20000000f) +
                    paramNiveau_[6];
 
   if (resultat < paramNiveau_[6])
@@ -136,11 +136,11 @@ float Barrage::calculerDebitAvecVolume(float volume, const ParamEquation& paramD
   FILE_LOG(logDEBUG) << "Barrage::calculerDebitAvecVol(float volume, ParamEquation& paramDebit)";
   // debit = P + Q * V + R * V**2 + S * V**3 + T * V**4 + U * V**5
 
-  float resultat = paramDebit[0] + 
-                   paramDebit[1] * volume + 
+  float resultat = paramDebit[0] +
+                   paramDebit[1] * volume +
                    paramDebit[2] * std::pow(volume, 2.0f) +
-                   paramDebit[3] * std::pow(volume, 3.0f) + 
-                   paramDebit[4] * std::pow(volume, 4.0f) + 
+                   paramDebit[3] * std::pow(volume, 3.0f) +
+                   paramDebit[4] * std::pow(volume, 4.0f) +
                    paramDebit[5] * std::pow(volume, 5.0f);
 
   return resultat;
@@ -148,7 +148,7 @@ float Barrage::calculerDebitAvecVolume(float volume, const ParamEquation& paramD
 
 //------------------------------------------------------------------
 float Barrage::calculerVolumeCpAval(float volumeEntrant, float deltaTemps, float volumeInitialCpAval, const DateChrono& datePasDeTemps,
-                                    std::vector<float>& volumesEvacues) 
+                                    std::vector<float>& volumesEvacues)
 {
   FILE_LOG(logDEBUG) << "Barrage::calculerVolumeCpAval(...)";
 
@@ -167,7 +167,7 @@ float Barrage::calculerVolumeCpAval(float volumeEntrant, float deltaTemps, float
     const ParamEquation* paramEquationDebitExt = trouverParamDebitExt(datePasDeTemps);
     int nbEvacuationInterne = (int)paramDebitEvacuationInt_.size();
     int nbEvacuation = nbEvacuationInterne;
-    
+
     if (paramEquationDebitExt != NULL) {
       nbEvacuation++;
     }
@@ -181,7 +181,7 @@ float Barrage::calculerVolumeCpAval(float volumeEntrant, float deltaTemps, float
     }
 
     if (paramEquationDebitExt != NULL) {
-      // Appele pour mettre a jour le volume du barrage 
+      // Appele pour mettre a jour le volume du barrage
       volumeEvacue = calculerVolumeEvacue(apportMoy, deltaTemps, *paramEquationDebitExt);
       volumesEvacues.push_back(volumeEvacue);
     }
@@ -201,7 +201,7 @@ const ParamEquation* const Barrage::trouverParamDebitExt(const DateChrono& jour)
       break;
     }
   }
-  
+
   if (iter != paramDebitEvacuationExt_.end())
     return &(iter->paramDebit);
   else
@@ -215,7 +215,7 @@ float Barrage::calculerVolumeEvacue(float volumeEntrant, float deltaTemps, const
 
   float volumeEvacue = deltaTemps * calculerDebitEvacue(volumeEntrant, deltaTemps, paramDebit);
   volumeEvacue = minf(1000000.0f * volume_, volumeEvacue);
-  
+
   float volumeBarrage = volume_ + (volumeEntrant - volumeEvacue) / 1000000.0f;
   // Nouveau volume d'eau au barrage.
   volume_ = volumeBarrage < 0.0f ? 0.0f : volumeBarrage;
@@ -231,11 +231,11 @@ float Barrage::calculerDebitEvacue(float volumeEntrant, float deltaTemps, const 
   int iteration = 0, nbChangementBornes = 0;
   float debit1 = maxf(0.0f, calculerDebitAvecVolume(paramDebit));
   float volume = volume_ * 1000000.0f;
-  float constante = (2.0f * volume / deltaTemps) + (2.0f * volumeEntrant / deltaTemps) - debit1; 
+  float constante = (2.0f * volume / deltaTemps) + (2.0f * volumeEntrant / deltaTemps) - debit1;
   constante = maxf(0.0f, constante);
- 
+
   float ga, b, gb, eps, c, gc, debit2, dx;
-   
+
   float a = volume + volumeEntrant;
 
   if (a == 0.0f) goto l_99;
@@ -360,7 +360,7 @@ float Barrage::resoudreGoodrich(float volume, float deltaTemps, float constante,
   float resultat = (2.0f * volume) / deltaTemps;
   float debit = calculerDebitAvecVolume(volume / 1000000.0f, paramDebit);
   resultat = resultat - constante + maxf(0.0f, debit);
-  
+
   return resultat;
 }
 
