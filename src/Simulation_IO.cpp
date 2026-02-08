@@ -2,11 +2,11 @@
 // Fichier: Simulation.cpp
 //
 // Date creation: 2012-10-01
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #include "stdafx.h"
@@ -20,7 +20,7 @@ void Simulation::ecrireResultats() {
   MATFile* pfichierResultats = MexHelper::mhMatOpen(fichierResultats_, "w");
 
   // Anciennes sorties. Conserve en commentaire. Peut etre utile pour tester.
-  // Les memes resultats structures differemment se retrouve dans les resultats 
+  // Les memes resultats structures differemment se retrouve dans les resultats
   // plus loin ci-dessous.
   /*****
   FILE_LOG(logINFO) << "Ecriture des bilans";
@@ -58,7 +58,7 @@ void Simulation::ecrireResultats() {
 matError Simulation::ecrireEtatsCE(MATFile* pfichierMatlab)
 {
   FILE_LOG(logDEBUG) << "Simulation::ecrireEtatsCE(MATFile* pfichierMatlab)";
-  
+
   mxArray* etatsCE = obtenirEtatsCE();
   matError retVal = matPutVariable(pfichierMatlab, "etatsCE", etatsCE);
   mxDestroyArray(etatsCE);
@@ -78,7 +78,7 @@ mxArray* Simulation::obtenirEtatsCE()
 mxArray* Simulation::obtenirEtatsCE(const std::vector<EtatsCarreauxEntiers>& etatsPasDeTemps)
 {
   FILE_LOG(logDEBUG) << "Simulation::obtenirEtatsCE(const std::vector<EtatsCarreauxEntiers>& etatsPasDeTemps)";
-  
+
   const size_t m = etatsPasDeTemps.size();
   // Nombre de CE qu'on desire en sortie
   size_t n = (size_t)std::count(parametres_.resultatsIdCE().begin(), parametres_.resultatsIdCE().end(), true);
@@ -88,16 +88,16 @@ mxArray* Simulation::obtenirEtatsCE(const std::vector<EtatsCarreauxEntiers>& eta
   // que le filtre, on prend tous les carreaux du parametre.
   n = (nbCE < n ? nbCE : n);
 
-  // Allocation de la memoire. 
-  mxArray** id                    = (mxArray**)mxMalloc(m * sizeof(mxArray*)); 
-  mxArray** iCarreauEntier        = (mxArray**)mxMalloc(m * sizeof(mxArray*)); 
-  mxArray** jCarreauEntier        = (mxArray**)mxMalloc(m * sizeof(mxArray*)); 
-  mxArray** niveauEauSol          = (mxArray**)mxMalloc(m * sizeof(mxArray*)); 
-  mxArray** niveauEauNappe        = (mxArray**)mxMalloc(m * sizeof(mxArray*)); 
-  mxArray** niveauEauLacsMarais   = (mxArray**)mxMalloc(m * sizeof(mxArray*)); 
-  mxArray** evapoPotJour          = (mxArray**)mxMalloc(m * sizeof(mxArray*)); 
-  mxArray** production            = (mxArray**)mxMalloc(m * sizeof(mxArray*)); 
-  mxArray** recharge            = (mxArray**)mxMalloc(m * sizeof(mxArray*)); 
+  // Allocation de la memoire.
+  mxArray** id                    = (mxArray**)mxMalloc(m * sizeof(mxArray*));
+  mxArray** iCarreauEntier        = (mxArray**)mxMalloc(m * sizeof(mxArray*));
+  mxArray** jCarreauEntier        = (mxArray**)mxMalloc(m * sizeof(mxArray*));
+  mxArray** niveauEauSol          = (mxArray**)mxMalloc(m * sizeof(mxArray*));
+  mxArray** niveauEauNappe        = (mxArray**)mxMalloc(m * sizeof(mxArray*));
+  mxArray** niveauEauLacsMarais   = (mxArray**)mxMalloc(m * sizeof(mxArray*));
+  mxArray** evapoPotJour          = (mxArray**)mxMalloc(m * sizeof(mxArray*));
+  mxArray** production            = (mxArray**)mxMalloc(m * sizeof(mxArray*));
+  mxArray** recharge            = (mxArray**)mxMalloc(m * sizeof(mxArray*));
 
   for (unsigned int i = 0; i < m; i++) {
     id[i]                    = mxCreateDoubleMatrix(1, n, mxREAL);
@@ -150,8 +150,8 @@ mxArray* Simulation::obtenirEtatsCE(const std::vector<EtatsCarreauxEntiers>& eta
     i++;
   }
 
-  const char *nomChamps[] = {"id", "iCarreauEntier", "jCarreauEntier", "niveauEauSol", "niveauEauNappe", 
-                             "niveauEauLacsMarais", "evapoPotJour", "production", "recharge"}; 
+  const char *nomChamps[] = {"id", "iCarreauEntier", "jCarreauEntier", "niveauEauSol", "niveauEauNappe",
+                             "niveauEauLacsMarais", "evapoPotJour", "production", "recharge"};
   int nbChamps = sizeof(nomChamps) / sizeof(char*);
   mxArray* etatsCE = mxCreateStructMatrix(1, m, nbChamps, nomChamps);
 
@@ -185,7 +185,7 @@ matError Simulation::ecrireEtatsCP(MATFile* pfichierMatlab)
 #endif
 
 //------------------------------------------------------------------
-mxArray* Simulation::obtenirEtatsCP() 
+mxArray* Simulation::obtenirEtatsCP()
 {
   FILE_LOG(logDEBUG) << "Simulation::obtenirEtatsCP()";
   return obtenirEtatsCP(debits_);
@@ -205,8 +205,8 @@ mxArray* Simulation::obtenirEtatsCP(const std::vector<EtatsCarreauxPartiels>& et
   n = (nbCP < n ? nbCP : n);
 
   // Allocation de la memoire.
-  mxArray** id      = (mxArray**)mxMalloc(m * sizeof(mxArray*)); 
-  mxArray** apport  = (mxArray**)mxMalloc(m * sizeof(mxArray*)); 
+  mxArray** id      = (mxArray**)mxMalloc(m * sizeof(mxArray*));
+  mxArray** apport  = (mxArray**)mxMalloc(m * sizeof(mxArray*));
   mxArray** volume  = (mxArray**)mxMalloc(m * sizeof(mxArray*));
   mxArray** debit   = (mxArray**)mxMalloc(m * sizeof(mxArray*));
 
@@ -245,7 +245,7 @@ mxArray* Simulation::obtenirEtatsCP(const std::vector<EtatsCarreauxPartiels>& et
     i++;
   }
 
-  const char *nomChamps[] = {"id" ,"apport", "volume", "debit"}; 
+  const char *nomChamps[] = {"id" ,"apport", "volume", "debit"};
   int nbChamps = sizeof(nomChamps) / sizeof(char*);
   mxArray* etatsCP = mxCreateStructMatrix(1, m, nbChamps, nomChamps);
 
@@ -287,7 +287,7 @@ matError Simulation::ecrirePositionsCP(MATFile* pfichierMatlab)
     memcpy((void*)(mxGetPr(positionsCP) + index), (void*)&codeCarreauPartiel, sizeof(double));
     i++;
   }
-  
+
   matError status = matPutVariable(pfichierMatlab, "positionsCP", positionsCP);
   mxDestroyArray(positionsCP);
 
@@ -375,7 +375,7 @@ mxArray* Simulation::obtenirEtatsBarrage(const std::vector<EtatsBarrages>& etats
     i++;
   }
 
-  const char *nomChamps[] = {"idCarreauPartiel", "volume", "niveau", "debitEntrant", "debitsSortants"}; 
+  const char *nomChamps[] = {"idCarreauPartiel", "volume", "niveau", "debitEntrant", "debitsSortants"};
   int nbChamps = sizeof(nomChamps) / sizeof(char*);
   mxArray* etatsBarrages = mxCreateStructMatrix(1, m, nbChamps, nomChamps);
 
@@ -413,15 +413,15 @@ mxArray* Simulation::obtenirPasDeTemps()
   // Pour un datenum, la partie decimale est une fraction de jour.
   // Autrement dit les heures, min et sec sont la partie decimale.
   double dureePasDeTemps = (double)parametres_.dureeHeuresPasSimulation() / 24.0; // 24 heures
-  //double dateDebut = parametres_.dateDebut().day_count().as_number() - MexHelper::OFFSET_DATENUM; 
-  double dateDebut = parametres_.dateDebut().toMatlabDatenum(); 
+  //double dateDebut = parametres_.dateDebut().day_count().as_number() - MexHelper::OFFSET_DATENUM;
+  double dateDebut = parametres_.dateDebut().toMatlabDatenum();
   double datePasDeTemps;
 
   for (int i = 0; i < nbPasDeTemps; i++) {
     datePasDeTemps = dateDebut + (i * dureePasDeTemps);
     memcpy((void*)(mxGetPr(pasDeTemps) + i), (void*)&datePasDeTemps, sizeof(double));
   }
-  
+
   return pasDeTemps;
 }
 
@@ -434,7 +434,7 @@ mxArray* Simulation::obtenirEtatsAvantAssimilations()
   std::map<DateChrono, EtatsCarreauxEntiers>::const_iterator iterCE;
   std::map<DateChrono, EtatsCarreauxPartiels>::const_iterator iterCP;
   std::map<DateChrono, EtatsBarrages>::const_iterator iterBarrage;
-  
+
   for (iterCE = avantAssimilationsCE_.begin(); iterCE != avantAssimilationsCE_.end(); iterCE++) {
     datesdistinctes.push_back(iterCE->first);
   }
@@ -445,7 +445,7 @@ mxArray* Simulation::obtenirEtatsAvantAssimilations()
       datesdistinctes.push_back(iterCP->first);
     }
   }
-  
+
   iterBarrage = avantAssimilationsBarrages_.begin();
   for (; iterBarrage != avantAssimilationsBarrages_.end(); iterBarrage++) {
     // Est-ce que cette date existe deja dans la liste?
@@ -458,10 +458,10 @@ mxArray* Simulation::obtenirEtatsAvantAssimilations()
   std::sort(datesdistinctes.begin(), datesdistinctes.end());
   const size_t nbPasDeTemps = datesdistinctes.size();
 
-  const char *nomChamps[] = {"pasDeTemps", "etatsCE", "etatsCP", "etatsBarrage"}; 
+  const char *nomChamps[] = {"pasDeTemps", "etatsCE", "etatsCP", "etatsBarrage"};
   int nbChamps = sizeof(nomChamps) / sizeof(char*);
   mxArray* etatsAvant = mxCreateStructMatrix(1, nbPasDeTemps, nbChamps, nomChamps);
-  
+
   mxArray *pasDetemps, *etatsCE, *etatsCP, *etatsBarrage;
 
   // Variable de travail pour l'appel a "obtenirEtatsCE()"
@@ -480,7 +480,7 @@ mxArray* Simulation::obtenirEtatsAvantAssimilations()
     pasDetemps = mxCreateDoubleMatrix(1,1,mxREAL);
     *mxGetPr(pasDetemps) = MexHelper::dateToDatenum(datesdistinctes[i]);
     mxSetField(etatsAvant, i, "pasDeTemps", pasDetemps);
-    
+
     // Des etatsCE sauvegardes pour cette date?
     if (assimilationsCE_.count(datesdistinctes[i]) > 0) {
       listeEtatsCarreauxEntiers.push_back(avantAssimilationsCE_[datesdistinctes[i]]);
@@ -531,10 +531,10 @@ matError Simulation::chargerEtatsCE(EtatsCarreauxEntiers& etatsCarreauxEntiers)
     return retCode;
   }
 
-  const mxArray *etats = etatsPrecedents_; 
+  const mxArray *etats = etatsPrecedents_;
 
   mxArray *etatsCE =  MexHelper::mhMxGetField(etats, 0, "etatsCE");
-  
+
   mxArray *iCarreauEntier        = MexHelper::mhMxGetField(etatsCE, 0, "iCarreauEntier");
   mxArray *jCarreauEntier        = MexHelper::mhMxGetField(etatsCE, 0, "jCarreauEntier");
   mxArray *niveauEauSol          = MexHelper::mhMxGetField(etatsCE, 0, "niveauEauSol");
@@ -546,7 +546,7 @@ matError Simulation::chargerEtatsCE(EtatsCarreauxEntiers& etatsCarreauxEntiers)
   if (iCarreauEntier != NULL) {
     // Donnees par CE
     int nbCE = (int)mxGetN(iCarreauEntier);
-  
+
     double* iCarreauEntierData        = MexHelper::mhMxGetPr(iCarreauEntier, "iCarreauEntier");
     double* jCarreauEntierData        = MexHelper::mhMxGetPr(jCarreauEntier, "jCarreauEntier");
     double* niveauEauSolData          = MexHelper::mhMxGetPr(niveauEauSol, "niveauEauSol");
@@ -585,10 +585,10 @@ matError Simulation::chargerEtatsCP(EtatsCarreauxPartiels& etatsCarreauxPartiels
     return retCode;
   }
 
-  const mxArray *etats = etatsPrecedents_; 
+  const mxArray *etats = etatsPrecedents_;
 
   mxArray *etatsCP =  MexHelper::mhMxGetField(etats, 0, "etatsCP");
-  
+
   mxArray *apport = MexHelper::mhMxGetField(etatsCP, 0, "apport");
   mxArray *volume = MexHelper::mhMxGetField(etatsCP, 0, "volume");
   mxArray *debit  = MexHelper::mhMxGetField(etatsCP, 0, "debit");
@@ -596,7 +596,7 @@ matError Simulation::chargerEtatsCP(EtatsCarreauxPartiels& etatsCarreauxPartiels
   if (apport != NULL) {
     // Donnees par CP
     int nbCP = (int)mxGetN(apport);
-  
+
     double* apportData = MexHelper::mhMxGetPr(apport, "apport");
     double* volumeData = MexHelper::mhMxGetPr(volume, "volume");
     double* debitData  = MexHelper::mhMxGetPr(debit, "debit");
@@ -632,10 +632,10 @@ matError Simulation::chargerEtatsBarrages()
     return retCode;
   }
 
-  const mxArray *etats = etatsPrecedents_; 
+  const mxArray *etats = etatsPrecedents_;
 
   mxArray *etatsBarrage =  MexHelper::mhMxGetField(etats, 0, "etatsBarrage");
-  
+
   mxArray *idCarreauPartiel = MexHelper::mhMxGetField(etatsBarrage, 0, "idCarreauPartiel");
   mxArray *volume           = MexHelper::mhMxGetField(etatsBarrage, 0, "volume");
 
@@ -668,7 +668,7 @@ int Simulation::initialiserAssimilations(const mxArray* assimilations)
     return retCode;
   }
 
-  
+
   size_t nbDonnees, nbDonneesCE, nbDonneesCP, nbDonneesBarrage;
 
   mxArray *etatsCE, *idCE;
@@ -680,7 +680,7 @@ int Simulation::initialiserAssimilations(const mxArray* assimilations)
   double *niveauEauSolData, *niveauEauNappeData, *niveauEauLacsMaraisData;
   double *evapoPotJourData, *productionData, *idCPData  , *apportData, *volumeData, *debitData, *niveauData;
   DateChrono datePasDeTemps;
-     
+
   EtatCarreauEntierAssim etatCarreauEntierAssim;
   EtatsCarreauxEntiersAssim etatsCarreauxEntiersAssim;
   EtatCarreauPartielAssim etatCarreauPartielAssim;
@@ -695,7 +695,7 @@ int Simulation::initialiserAssimilations(const mxArray* assimilations)
     //datePasDeTemps = MexHelper::datenumToDate(&pasDeTempsData);
     datePasDeTemps = DateChrono::fromMatlabDatenum(pasDeTempsData);
     etatsCE = MexHelper::mhMxGetField(assimilations, i, "etatsCE");
-    
+
     /***** Carreaux Entiers *****/
     // Donnees d'assimilation relatives aux CE pour ce pas de temps d'assimilation
     if (mxGetNumberOfElements(etatsCE) > 0) {
@@ -703,7 +703,7 @@ int Simulation::initialiserAssimilations(const mxArray* assimilations)
       idCEData = MexHelper::mhMxGetPr(idCE, "id");
 
       // Obtention des pointeurs de donnees
-      // On utilise mxGetPr plutot que MexHelper::mhMxGetPr pour la possibilite 
+      // On utilise mxGetPr plutot que MexHelper::mhMxGetPr pour la possibilite
       // d'avoir un pointeur null
       niveauEauSol = MexHelper::mhMxGetField(etatsCE, 0, "niveauEauSol");
       etatCarreauEntierAssim.niveauEauSolType = AssimilationHelper::obtenirTypeAssim(niveauEauSol);
@@ -735,19 +735,19 @@ int Simulation::initialiserAssimilations(const mxArray* assimilations)
 
         etatCarreauEntierAssim.idCarreauEntier = (int)idCEData[j];
 
-        AssimilationHelper::obtenirValeursAssim(niveauEauSolData, etatCarreauEntierAssim.niveauEauSolType, 
+        AssimilationHelper::obtenirValeursAssim(niveauEauSolData, etatCarreauEntierAssim.niveauEauSolType,
                             j, etatCarreauEntierAssim.niveauEauSol);
 
-        AssimilationHelper::obtenirValeursAssim(niveauEauNappeData, etatCarreauEntierAssim.niveauEauNappeType, 
+        AssimilationHelper::obtenirValeursAssim(niveauEauNappeData, etatCarreauEntierAssim.niveauEauNappeType,
                             j, etatCarreauEntierAssim.niveauEauNappe);
 
-        AssimilationHelper::obtenirValeursAssim(niveauEauLacsMaraisData, etatCarreauEntierAssim.niveauEauLacsMaraisType, 
+        AssimilationHelper::obtenirValeursAssim(niveauEauLacsMaraisData, etatCarreauEntierAssim.niveauEauLacsMaraisType,
                             j, etatCarreauEntierAssim.niveauEauLacsMarais);
 
-        AssimilationHelper::obtenirValeursAssim(evapoPotJourData, etatCarreauEntierAssim.evapoPotJourType, 
+        AssimilationHelper::obtenirValeursAssim(evapoPotJourData, etatCarreauEntierAssim.evapoPotJourType,
                             j, etatCarreauEntierAssim.evapoPotJour);
 
-        AssimilationHelper::obtenirValeursAssim(productionData, etatCarreauEntierAssim.productionType, 
+        AssimilationHelper::obtenirValeursAssim(productionData, etatCarreauEntierAssim.productionType,
                             j, etatCarreauEntierAssim.production);
 
         etatsCarreauxEntiersAssim.push_back(etatCarreauEntierAssim);
@@ -783,13 +783,13 @@ int Simulation::initialiserAssimilations(const mxArray* assimilations)
 
         etatCarreauPartielAssim.idCarreauPartiel = (int)idCPData[k];
 
-        AssimilationHelper::obtenirValeursAssim(apportData, etatCarreauPartielAssim.apportType, 
+        AssimilationHelper::obtenirValeursAssim(apportData, etatCarreauPartielAssim.apportType,
                             k, etatCarreauPartielAssim.apport);
 
-        AssimilationHelper::obtenirValeursAssim(volumeData, etatCarreauPartielAssim.volumeType, 
+        AssimilationHelper::obtenirValeursAssim(volumeData, etatCarreauPartielAssim.volumeType,
                             k, etatCarreauPartielAssim.volume);
 
-        AssimilationHelper::obtenirValeursAssim(debitData, etatCarreauPartielAssim.debitType, 
+        AssimilationHelper::obtenirValeursAssim(debitData, etatCarreauPartielAssim.debitType,
                             k, etatCarreauPartielAssim.debit);
 
         etatsCarreauxPartielsAssim.push_back(etatCarreauPartielAssim);
@@ -797,7 +797,7 @@ int Simulation::initialiserAssimilations(const mxArray* assimilations)
 
        assimilationsCP_.insert(std::make_pair(datePasDeTemps, etatsCarreauxPartielsAssim));
     }
-    
+
     /***** Barrages *****/
     // Donnees d'assimilation relatives aux barrages pour ce pas de temps d'assimilation.
     etatsBarrage = MexHelper::mhMxGetField(assimilations, i, "etatsBarrage");

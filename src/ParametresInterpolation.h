@@ -2,11 +2,11 @@
 // Fichier: ParametresInterpolation.h
 //
 // Date creation: 2013-05-21
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #pragma once
@@ -15,11 +15,11 @@
 class ParametresInterpolation
 {
 public:
-  //! Constructeur. 
+  //! Constructeur.
   ParametresInterpolation();
-  //! Destructeur. 
+  //! Destructeur.
   ~ParametresInterpolation();
-   
+
   //! Getter
   int type() const;
   //! Getter

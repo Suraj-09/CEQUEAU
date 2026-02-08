@@ -2,11 +2,11 @@
 // Fichier: DonneesMeteo.cpp
 //
 // Date creation: 2012-10-01
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #include "stdafx.h"
@@ -71,7 +71,7 @@ void DonneesMeteo::initialiserFichier(const std::string fichierEntree)
   mxArray* donneesMeteo = MexHelper::mhMatGetStructVariable(pFichierMeteo, "meteo");
 
   // Pour valider le type des donnees (double ou simple precision).
-  // ATTENTION: on valide seulement sur tMin et tMax mais TOUTES les donnes 
+  // ATTENTION: on valide seulement sur tMin et tMax mais TOUTES les donnes
   // meteo doivent etre du meme type.
   mxArray* tMin = MexHelper::mhMxGetField(donneesMeteo, 0, "tMin");
   mxArray* tMax = MexHelper::mhMxGetField(donneesMeteo, 0, "tMax");
@@ -87,7 +87,7 @@ void DonneesMeteo::initialiserFichier(const std::string fichierEntree)
     std::string erreur = "Type de donnees meteo non-supporte.";
     throw std::runtime_error(erreur);
   }
-  
+
   matClose(pFichierMeteo);
   mxDestroyArray(donneesMeteo);
 }
@@ -102,22 +102,22 @@ void DonneesMeteo::initialiser(const mxArray* meteo)
 
 //------------------------------------------------------------------
 // Methode publique d'initialisation
-void DonneesMeteo::initialiser(const mxArray* meteo, const std::vector<std::string>& champsFonte, 
-                               const std::vector<std::string>& champsEvapo, const std::vector<std::string>& champsAutre) 
+void DonneesMeteo::initialiser(const mxArray* meteo, const std::vector<std::string>& champsFonte,
+                               const std::vector<std::string>& champsEvapo, const std::vector<std::string>& champsAutre)
 {
   FILE_LOG(logDEBUG) << "DonneesMeteo::initialiser(const mxArray* meteo)";
 
   // Pour valider le type des donnees (double ou simple precision).
-  // ATTENTION: on valide seulement sur tMin et tMax mais TOUTES les donnes 
+  // ATTENTION: on valide seulement sur tMin et tMax mais TOUTES les donnes
   // meteo doivent etre du meme type.
   mxArray* tMin = MexHelper::mhMxGetField(meteo, 0, "tMin");
   mxArray* tMax = MexHelper::mhMxGetField(meteo, 0, "tMax");
-  mxArray *pTot = mxGetField(meteo, 0, std::string("pTot").c_str()); 
+  mxArray *pTot = mxGetField(meteo, 0, std::string("pTot").c_str());
   mxArray *pluie, *neige;
 
   if (pTot == NULL) {
-    pluie = MexHelper::mhMxGetField(meteo, 0, "pluie"); 
-    neige = MexHelper::mhMxGetField(meteo, 0, "neige"); 
+    pluie = MexHelper::mhMxGetField(meteo, 0, "pluie");
+    neige = MexHelper::mhMxGetField(meteo, 0, "neige");
   }
   else {
     pluie = pTot;
@@ -138,27 +138,27 @@ void DonneesMeteo::initialiser(const mxArray* meteo, const std::vector<std::stri
     throw std::runtime_error(erreur);
   }
 }
- 
+
 //------------------------------------------------------------------
 template <typename Type>
-void DonneesMeteo::initialiser(const mxArray* meteo, const std::vector<std::string>& champsFonte, 
+void DonneesMeteo::initialiser(const mxArray* meteo, const std::vector<std::string>& champsFonte,
                                const std::vector<std::string>& champsEvapo, const std::vector<std::string>& champsAutre)
 {
   FILE_LOG(logDEBUG) << "DonneesMeteo::initialiser<>(const mxArray* meteo)";
 
   mxArray* tMin = MexHelper::mhMxGetField(meteo, 0, "tMin");
   mxArray* tMax = MexHelper::mhMxGetField(meteo, 0, "tMax");
-  
+
   std::string nomVariable = "pTot";
-  mxArray *pTot = mxGetField(meteo, 0, nomVariable.c_str()); 
+  mxArray *pTot = mxGetField(meteo, 0, nomVariable.c_str());
 
   mxArray *pluie;
   mxArray *neige;
   estPtot_ = false;
 
   if (pTot == NULL) {
-    pluie = MexHelper::mhMxGetField(meteo, 0, "pluie"); 
-    neige = MexHelper::mhMxGetField(meteo, 0, "neige"); 
+    pluie = MexHelper::mhMxGetField(meteo, 0, "pluie");
+    neige = MexHelper::mhMxGetField(meteo, 0, "neige");
   }
   else {
     pluie = pTot;
@@ -171,10 +171,10 @@ void DonneesMeteo::initialiser(const mxArray* meteo, const std::vector<std::stri
   // Donnees par CE
   size_t nbCE = mxGetN(tMin);
 
-  // Dans le cas ou le constructeur par defaut a ete utilise, on prend les quantite trouve 
+  // Dans le cas ou le constructeur par defaut a ete utilise, on prend les quantite trouve
   // dans l'intrant
   if (nbCarreauxEntiers_ == 0 && nbPasDeTemps_ == 0) {
-    nbCarreauxEntiers_ = (int)nbCE; 
+    nbCarreauxEntiers_ = (int)nbCE;
     nbPasDeTemps_ = (int)nbPasDeTemps;
     valeurs_.reserve(nbPasDeTemps);
   }
@@ -216,7 +216,7 @@ void DonneesMeteo::initialiser(const mxArray* meteo, const std::vector<std::stri
     for (champsIter = champsAutre.begin(); champsIter != champsAutre.end(); champsIter++) {
         if (MexHelper::hasField(meteo, 0, *champsIter)) {
             listeDataAutre.push_back(MexHelper::mhMxGetField(meteo, 0, *champsIter));
-            
+
             const mwSize* dims = mxGetDimensions(listeDataAutre.back());
             numRows = dims[0];
             numCols = dims[1];
@@ -251,12 +251,12 @@ void DonneesMeteo::initialiser(const mxArray* meteo, const std::vector<std::stri
       }
 
       MeteoPtr meteoPtr(new Meteo(valeurMin, valeurMax, valeurPluie, valeurNeige));
-      
+
       valeursFonte.clear();
       for (dataIter = dataFonte.begin(); dataIter != dataFonte.end(); dataIter++) {
         valeursFonte.push_back((float)(*dataIter)[i + j * nbPasDeTemps]);
       }
-  
+
       valeursEvapo.clear();
       for (dataIter = dataEvapo.begin(); dataIter != dataEvapo.end(); dataIter++) {
         valeursEvapo.push_back((float)(*dataIter)[i + j * nbPasDeTemps]);
@@ -277,7 +277,7 @@ void DonneesMeteo::initialiser(const mxArray* meteo, const std::vector<std::stri
 
   if (validerDonneesMeteo() != 0) {
     std::stringstream erreur;
-    
+
     erreur << "Nombre incoherent de donnees meteo.\n";
     erreur << "  Nb pas de temps meteo: " << valeurs_.size() << ", Nb pas de temps simul: " << nbPasDeTemps_ << std::endl;
     erreur << "  Nb CE meteo: " << valeurs_.back().size() << ", Nb CE simul: " << nbCarreauxEntiers_ << std::endl;
@@ -286,7 +286,7 @@ void DonneesMeteo::initialiser(const mxArray* meteo, const std::vector<std::stri
 }
 
 //------------------------------------------------------------------
-int DonneesMeteo::validerDonneesMeteo() 
+int DonneesMeteo::validerDonneesMeteo()
 {
     FILE_LOG(logDEBUG) << "DonneesMeteo::validerDonneesMeteo()";
     int retVal = 0;
@@ -313,9 +313,9 @@ bool TrieurCEGrille::operator ()(const CarreauEntierPtr carreauEntier1, const Ca
   if (carreauEntier1->j() < carreauEntier2->j())
     return true;
   // Si sur la meme ligne, comparaison des colonnes.
-  else if (carreauEntier1->j() == carreauEntier2->j() && carreauEntier1->i() < carreauEntier2->i()) 
+  else if (carreauEntier1->j() == carreauEntier2->j() && carreauEntier1->i() < carreauEntier2->i())
     return true;
-  else 
+  else
     return false;
 };
 
@@ -326,7 +326,7 @@ bool TrieurMeteoId::operator ()(const MeteoPtr meteo1, const MeteoPtr meteor2)
   // Comparaison des lignes
   if (meteo1->idCarreauEntier() < meteor2->idCarreauEntier())
     return true;
-  else 
+  else
     return false;
 };
 
@@ -336,7 +336,7 @@ void DonneesMeteo::trierParId(const std::vector<CarreauEntierPtr>& carreauxEntie
   FILE_LOG(logDEBUG) << "DonneesMeteo::trierParId(const std::vector<CarreauEntierPtr>& carreauxEntiers)";
   std::vector<CarreauEntierPtr> carreauxEntiersTemporaire;
   carreauxEntiersTemporaire.reserve(carreauxEntiers.size());
-  
+
   // Copie de travail des carreaux entiers.
   std::vector<CarreauEntierPtr>::const_iterator carreauxEntiersIter = carreauxEntiers.begin();
   for (; carreauxEntiersIter!= carreauxEntiers.end(); carreauxEntiersIter++) {
@@ -345,17 +345,17 @@ void DonneesMeteo::trierParId(const std::vector<CarreauEntierPtr>& carreauxEntie
       carreauxEntiersIter->get()->i(),
       carreauxEntiersIter->get()->j())));
   }
-   
+
   TrieurCEGrille trieurCEGrille;
   TrieurMeteoId trieurMeteoId;
   // Tri des carreaux entiers selon grille i,j. Meme ordre que les donnees meteo.
-  std::sort(carreauxEntiersTemporaire.begin(), carreauxEntiersTemporaire.end(), trieurCEGrille);  
+  std::sort(carreauxEntiersTemporaire.begin(), carreauxEntiersTemporaire.end(), trieurCEGrille);
 
   // On parcourt chaque donnee meteo pour lui assigner l'id du
-  // carreau entier correspondant. Le vecteur de donnees meteo est 
+  // carreau entier correspondant. Le vecteur de donnees meteo est
   // ensuite trie par id. Ceci pour chaque pas de temps.
   std::vector<MeteoGrille>::iterator valeursIter = valeurs_.begin();
-  MeteoGrille::iterator meteoGrilleIter; 
+  MeteoGrille::iterator meteoGrilleIter;
   // Boucle sur l'ensemble des donnees meteo.
   for (; valeursIter != valeurs_.end(); valeursIter++) {
     meteoGrilleIter = valeursIter->begin();

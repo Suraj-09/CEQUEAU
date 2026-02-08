@@ -2,11 +2,11 @@
 // Fichier: Simulation.h
 //
 // Date creation: 2012-10-01
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #pragma once
@@ -51,7 +51,7 @@ public:
 
   // QUALITE
   // Donnees necessaires pour les calculs de qualite
-  class Qualite 
+  class Qualite
   {
   public:
     float RUISST;
@@ -59,11 +59,11 @@ public:
     float SONAPT;
     float SLAMAT;
     float PPTTOT;
-    // evapotranspirationSol 
-    float ETRSOL; 
+    // evapotranspirationSol
+    float ETRSOL;
     // evapotranspirationNappe,
     float ETRNAP;
-    //evaporationLac, 
+    //evaporationLac,
     float ETRLAC;
   } Qualite;
 };
@@ -71,8 +71,8 @@ public:
 //! Classe de donnees pour l'assimilation des etats d'un carreau entier.
 /*!
   Utilise pour assimiler des etats aux carreaux entiers.
-  Une valeur: on substitue cette valeur. 
-  Deux valeurs: La premiere est un facteur multiplicatif 
+  Une valeur: on substitue cette valeur.
+  Deux valeurs: La premiere est un facteur multiplicatif
   et la seconde une valeur a additionner.
 */
 class EtatCarreauEntierAssim
@@ -117,8 +117,8 @@ public:
 //! Classe de donnees pour l'assimilation des etats d'un carreau partiel.
 /*!
   Utilise pour assimiler des etats aux carreaux partiels.
-  Une valeur: on substitue cette valeur. 
-  Deux valeurs: La premiere est un facteur multiplicatif 
+  Une valeur: on substitue cette valeur.
+  Deux valeurs: La premiere est un facteur multiplicatif
   et la seconde une valeur a additionner.
 */
 class EtatCarreauPartielAssim
@@ -142,9 +142,9 @@ public:
   float niveau;
   // Debit entrant au barrage
   float debitEntrant;
-  // Debits sortants du barrage. 
+  // Debits sortants du barrage.
   // Contient une valeur sauf dans le cas d'un barrage type 5.
-  // Dans ce cas les valeurs sont ordonnees par regles d'evacuations internes 
+  // Dans ce cas les valeurs sont ordonnees par regles d'evacuations internes
   // suivi de l'evacuation externe
   std::vector<float> debitsSortants;
 };
@@ -152,8 +152,8 @@ public:
 //! Classe de donnees pour l'assimilation des etats d'un barrage.
 /*!
   Utilise pour assimiler des etats aux barrage.
-  Une valeur: on substitue cette valeur. 
-  Deux valeurs: La premiere est un facteur multiplicatif 
+  Une valeur: on substitue cette valeur.
+  Deux valeurs: La premiere est un facteur multiplicatif
   et la seconde une valeur a additionner.
 */
 class EtatBarrageAssim
@@ -177,9 +177,9 @@ public:
   float valeur;
   float correction;
   float distance;
-}; 
+};
 typedef std::vector<ReleveNeige> RelevesNeige;
-bool sortByDistance(const ReleveNeige &lhs, const ReleveNeige &rhs); 
+bool sortByDistance(const ReleveNeige &lhs, const ReleveNeige &rhs);
 
 //! Liste des etats des carreaux entiers a chaque pas de temps.
 typedef std::vector<EtatCarreauEntier>  EtatsCarreauxEntiers;
@@ -197,7 +197,7 @@ typedef std::vector<EtatBarrageAssim>        EtatsBarragesAssim;
 
 //! Classe simulation
 /*!
-  Classe principale de l'application. 
+  Classe principale de l'application.
 */
 class Simulation
 {
@@ -275,11 +275,11 @@ private:
   //! Fonction de production
   /*!
     \param datePasDeTemps Date du pas de temps.
-    \param noPasDeTemps No du du pas de temps. 
+    \param noPasDeTemps No du du pas de temps.
   */
   int  executerProduction(const DateChrono& datePasDeTemps, const int& noPasDeTemps);
 
-  //! Initialisation des donnees d'assimilation 
+  //! Initialisation des donnees d'assimilation
   int initialiserAssimilations(const mxArray* assimilations);
   //! Assimilation donnees CE
   int assimiler(const DateChrono& datePasDeTemps, EtatsCarreauxEntiers& etatsCarreauxEntiers);
@@ -287,12 +287,12 @@ private:
   int assimiler(const DateChrono& datePasDeTemps, EtatsCarreauxPartiels& etatsCarreauxPartiels);
   //! Assimilation donnees Barrages
   int assimiler(const DateChrono& datePasDeTemps, EtatsBarrages& etatsBarrages);
-  
+
   //! Fonction de transfert
   /*!
     \param nbTransfertsParJour Nombre de transfert par jour.
     \param datePasDeTemps Date du pas de temps.
-    \param noPasDeTemps No du du pas de temps. 
+    \param noPasDeTemps No du du pas de temps.
   */
   int  executerTransfert(const int& nbTransfertsParJour, const DateChrono& datePasDeTemps,
                          const int& noPasDeTemps, const float& duree);
@@ -323,16 +323,16 @@ private:
     \return 0 ok, -1 sinon
   */
   int calculerFonte(float surfaceForetCE, const EtatCarreauEntier& etatPrecCarreauEntier,
-                EtatCarreauEntier& etatCarreauEntier, float PJE_pluie, float PJN_neige, float TJE_tempMoy, 
+                EtatCarreauEntier& etatCarreauEntier, float PJE_pluie, float PJN_neige, float TJE_tempMoy,
                 float facteurModulSoleilNeige, float& eauDisponible);
 
-  //! Calcul de la fonte sur un carreau entier pour un pas de temps. 
+  //! Calcul de la fonte sur un carreau entier pour un pas de temps.
   /*!
-    Version avec enonces goto. Conservee a titre de reference. 
+    Version avec enonces goto. Conservee a titre de reference.
   */
   /***
   int calculerFonteAvecGoto(float surfaceForetCE, const EtatCarreauEntier& etatPrecCarreauEntier,
-                EtatCarreauEntier& etatCarreauEntier, float PJE_pluie, float PJN_neige, float TJE_tempMoy, 
+                EtatCarreauEntier& etatCarreauEntier, float PJE_pluie, float PJN_neige, float TJE_tempMoy,
                 float facteurModulSoleilNeige, float& fonteDisponible, float& eauDisponible);
   ***/
 
@@ -365,10 +365,10 @@ private:
 
   //! Ecriture des resultats de la simulation.
   void ecrireResultats();
-  
+
   //! Etats CE en mxArray
   mxArray* obtenirEtatsCE(const std::vector<EtatsCarreauxEntiers>& etatsPasDeTemps);
- 
+
   //! Etats CP en mxArray
   mxArray* obtenirEtatsCP(const std::vector<EtatsCarreauxPartiels>& etatsPasDeTemps);
 
@@ -383,7 +383,7 @@ private:
     en format Matlab.
   */
   matError ecrireEtatsCE(MATFile* pfichierMatlab);
-  
+
   //! Sauvegarde de l'etat de chaque carreau partiel en format Matlab.
   /*!
     Ecriture de l'etat de chaque carreau partiel a chaque pas de temps

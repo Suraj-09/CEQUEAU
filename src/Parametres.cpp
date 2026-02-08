@@ -2,11 +2,11 @@
 // Fichier: Parametres.cpp
 //
 // Date creation: 2012-10-01
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #include "stdafx.h"
@@ -14,7 +14,7 @@
 
 //------------------------------------------------------------------
 Parametres::Parametres()
-{ 
+{
   FILE_LOG(logDEBUG) << "Parametres::Parametres()";
 }
 
@@ -110,7 +110,7 @@ const ParamPompage& Parametres::pompage() const
 void Parametres::initialiserFichier(std::string nomFichierParamExec, std::string nomFichierParamSimul, int nbCE, int nbCP)
 {
   FILE_LOG(logDEBUG) << "Parametres::initialiserFichier(std::string nomFichierParamExec, std::string nomFichierParamSimul, int nbCE, int nbCP)";
-  
+
   MATFile* pFichierParamExec = MexHelper::mhMatOpen(nomFichierParamExec, "r");
   mxArray* parametresExec = MexHelper::mhMatGetStructVariable(pFichierParamExec, "execution");
   MATFile* pFichierParamSimul = MexHelper::mhMatOpen(nomFichierParamSimul, "r");
@@ -130,13 +130,13 @@ void Parametres::initialiser(const mxArray* paramExec, const mxArray* paramSimul
 {
   FILE_LOG(logDEBUG) << "Parametres::initialiser(const mxArray* paramExec, const mxArray* paramSimul, int nbCE, int nbCP)";
   int nbValeurs;
-  
+
   double datenum = 730851.0; // Resultat de datenum(2000, 12, 31) en Matlab
   //date dateTest = MexHelper::datenumToDate(&datenum);
 
   DateChrono dateTest = DateChrono::fromMatlabDatenum(datenum);
 
-  // Validation de la difference entre datenum Matlab et la representation 
+  // Validation de la difference entre datenum Matlab et la representation
   // interne de boost::gregorian.
   if (dateTest.getYear() != 2000 || dateTest.getMonth() != 12 ||  dateTest.getDay() != 31) {
     std::string erreur = "Valeur de OFFSET_DATENUM_MATLAB invalide.";
@@ -210,8 +210,8 @@ void Parametres::initialiser(const mxArray* paramExec, const mxArray* paramSimul
   MexHelper::chargerValeurs(option, "moduleFonte", option_.moduleFonte);
   MexHelper::chargerValeurs(option, "moduleEvapo", option_.moduleEvapo);
   MexHelper::chargerValeurs(option, "calculQualite", option_.calculQualite);
-  
-  
+
+
   if (MexHelper::hasField(option, 0, "moduleDLI")) {
       MexHelper::chargerValeurs(option, "moduleDLI", option_.moduleDLI);
   } else {
@@ -312,7 +312,7 @@ void Parametres::initialiser(const mxArray* paramExec, const mxArray* paramSimul
   /** ctp **/
   mxArray* ctp = MexHelper::mhMxGetField(paramSimul, 0, "ctp");
   nbValeurs = (int)mxGetNumberOfElements(ctp);
-  
+
   if (validerNombreValeurs("ctp", nbValeurs, nbCP)) {
     if (nbValeurs > 1) {
       double* valeur = MexHelper::mhMxGetPr(ctp, "ctp");
@@ -400,7 +400,7 @@ void Parametres::initialiser(const mxArray* paramExec, const mxArray* paramSimul
   // TODO: Releves neige
   // Vecteurs DATERELEVE et RELEVEMOY
   bool possedeReleves = MexHelper::hasField(paramSimul, 0, "relevesNeige");
-  facultatifs_.typeAjustementNeige = AUCUN; 
+  facultatifs_.typeAjustementNeige = AUCUN;
   if (possedeReleves) {
     mxArray* relevesNeige = MexHelper::mhMxGetField(paramSimul, 0, "relevesNeige");
     int iMin, iMax, jMin, jMax, nbReleves = (int)mxGetNumberOfElements(relevesNeige);
@@ -409,7 +409,7 @@ void Parametres::initialiser(const mxArray* paramExec, const mxArray* paramSimul
     DateChrono uneDate;
     ValeurZone releveNeige;
     facultatifs_.typeAjustementNeige = STATIONS_3;
-    
+
     for (int cptReleves = 0; cptReleves < nbReleves; cptReleves++) {
       MexHelper::chargerValeurs(relevesNeige, "pasDeTemps", pasDeTemps, cptReleves);
       MexHelper::chargerValeurs(relevesNeige, "iMin", iMin, cptReleves);
@@ -424,7 +424,7 @@ void Parametres::initialiser(const mxArray* paramExec, const mxArray* paramSimul
       releveNeige.jMax = jMax;
       releveNeige.valeur = valeur;
       facultatifs_.relevesNeige.insert(std::make_pair(uneDate, releveNeige));
-      
+
       // On considere une application par zone si les min et max sont differents
       if (iMax != 0 && iMin != iMax || jMax != 0 && jMin != jMax) {
         facultatifs_.typeAjustementNeige = ZONE;
@@ -435,7 +435,7 @@ void Parametres::initialiser(const mxArray* paramExec, const mxArray* paramSimul
 }
 
 //------------------------------------------------------------------
-bool Parametres::validerNombreValeurs(const std::string& nomChamp, int nbValeur, int nbValeurOK) 
+bool Parametres::validerNombreValeurs(const std::string& nomChamp, int nbValeur, int nbValeurOK)
 {
   FILE_LOG(logDEBUG) << "Parametres::validerNombreValeurs(...)";
 
@@ -443,7 +443,7 @@ bool Parametres::validerNombreValeurs(const std::string& nomChamp, int nbValeur,
   // Si plus d'une valeur, on doit avoir un nombre coherent de valeur (nbCE ou bien nbCP).
   if (nbValeur > 1 && nbValeur != nbValeurOK) {
     std::stringstream avertissement;
-    
+
     avertissement << "Avertissement: Le nombre de valeurs de " << nomChamp << " est incoherent: " << nbValeur << std::endl;
     avertissement << "  Seule la premiere valeur sera utilisee." << std::endl;
     avertissement << "  Doit egaler 1 ou bien nombre de carreaux: " << nbValeurOK << std::endl;
@@ -452,7 +452,7 @@ bool Parametres::validerNombreValeurs(const std::string& nomChamp, int nbValeur,
     FILE_LOG(logWARNING) << avertissement.str();
     retVal = false;
   }
-  
+
   return retVal;
 }
 
@@ -460,7 +460,7 @@ bool Parametres::validerNombreValeurs(const std::string& nomChamp, int nbValeur,
 int Parametres::nbJoursSimulation() const
 {
   FILE_LOG(logDEBUG) << "Parametres::nbJoursSimulation()";
-      
+
   DateChrono dateDebut = dateDebut_;
   DateChrono dateFin = dateFin_;
 
@@ -494,23 +494,23 @@ ParamCE::ParamCE()
 
   float infini = std::numeric_limits<float>::infinity();
 
-  seuilTranformationPluieNeige =      infini; 
-  tauxPotentielFonteForet =           infini; 
-  tauxPotentielFonteClairiere =       infini; 
-  seuilTempFonteForet =               infini; 
-  seuilTempFonteClairiere =           infini; 
-  tempMurissementNeige =              infini; 
-  coeffInfiltrationNappe =            infini; 
-  coeffVidangeBasseNappe =            infini;  
-  coeffVidangeHauteNappe =            infini;  
-  coeffVidangeIntermediaireSol =      infini;  
-  seuilInfiltrationSolVersNappe =     infini;  
-  seuilVidangeIntermediaireSol =      infini;  
-  seuilVidangeHauteNappe =            infini;  
-  seuilPrelevementEauTauxPotentiel =  infini;  
-  hauteurReservoirSol =               infini;  
-  lameEauDebutRuisellement =          infini;  
-  fractionImpermeableCE =             infini;  
+  seuilTranformationPluieNeige =      infini;
+  tauxPotentielFonteForet =           infini;
+  tauxPotentielFonteClairiere =       infini;
+  seuilTempFonteForet =               infini;
+  seuilTempFonteClairiere =           infini;
+  tempMurissementNeige =              infini;
+  coeffInfiltrationNappe =            infini;
+  coeffVidangeBasseNappe =            infini;
+  coeffVidangeHauteNappe =            infini;
+  coeffVidangeIntermediaireSol =      infini;
+  seuilInfiltrationSolVersNappe =     infini;
+  seuilVidangeIntermediaireSol =      infini;
+  seuilVidangeHauteNappe =            infini;
+  seuilPrelevementEauTauxPotentiel =  infini;
+  hauteurReservoirSol =               infini;
+  lameEauDebutRuisellement =          infini;
+  fractionImpermeableCE =             infini;
   conductiviteHydraulique =           infini;
   coeffEmmagasinement =               infini;
 }

@@ -2,11 +2,11 @@
 // Fichier: SimulationQualite.h
 //
 // Date creation: 2013-04-11
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #pragma once
@@ -36,18 +36,18 @@ namespace Qualite {
 	float qradin; // energie radiation longue longueur d'onde du soleil
 	float qevap;  // energie evaporation
 	float qconv;  // energie convection
-	float enerlo; // energie local 
+	float enerlo; // energie local
 	float eneram; // energie amont
 	float eneres; // energie reseau
-    EtatCarreauPartiel() :idCarreauPartiel(0), temperature(0.0f), qruiss(0.0f), qnappe(0.0f), 
+    EtatCarreauPartiel() :idCarreauPartiel(0), temperature(0.0f), qruiss(0.0f), qnappe(0.0f),
       qhypo(0.0f), qlacma(0.0f), qradso(0.0f), qradin(0.0f), qevap(0.0f), qconv(0.0f), enerlo(0.0f), eneram(0.0f), eneres(0.0f) {}
   };
 
   //! Classe de donnees pour l'assimilation des etats d'un carreau partiel.
   /*!
     Utilise pour assimiler des etats aux carreaux partiels.
-    Une valeur: on substitue cette valeur. 
-    Deux valeurs: La premiere est un facteur multiplicatif 
+    Une valeur: on substitue cette valeur.
+    Deux valeurs: La premiere est un facteur multiplicatif
     et la seconde une valeur a additionner.
   */
   class EtatCarreauPartielAssim
@@ -62,10 +62,10 @@ namespace Qualite {
   typedef std::vector<EtatCarreauPartiel> EtatsCarreauxPartiels;
   //! Liste des assimilations des carreaux partiels a chaque pas de temps.
   typedef std::vector<EtatCarreauPartielAssim> EtatsCarreauxPartielsAssim;
-	
+
   typedef struct {
 	/* tire de l'algorithme SPA */
-	// 
+	//
 
 	const DateChrono pasDeTemps;	// time step
 	float heureLocal;			// local time
@@ -198,7 +198,7 @@ private:
   std::map<DateChrono, Qualite::EtatsCarreauxPartielsAssim> assimilationsCP_;
   //! Etats des carreaux partiels, avant assimilation.
   std::map<DateChrono, Qualite::EtatsCarreauxPartiels> avantAssimilationsCP_;
-  //! Initialisation des donnees d'assimilation 
+  //! Initialisation des donnees d'assimilation
   int initialiserAssimilations(const mxArray* assimilations);
   //! Assimilation donnees CP
   int assimiler(const DateChrono& datePasDeTemps, Qualite::EtatsCarreauxPartiels& etatsCarreauxPartiels);
@@ -218,7 +218,7 @@ private:
   //! Module ombrage
   float calculerRatioOmbre(const DateChrono& datePasDeTemps, PositionSolaire& pos, const CarreauPartielPtr& carreauPartielPtr) const;
   double calculerRatioOmbre(double altitudeSolaire, double azimutSolaire, double azimutRiviere, double largeurRiviere, double hauteurArbre) const;
-  
+
   double calculerCanopeLAI(double LAI);
   double calculerCanopeTypeArbre(double pctConifer, double pctFeuillu);
 

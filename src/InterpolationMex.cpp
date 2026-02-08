@@ -2,11 +2,11 @@
 // Fichier: CequeauQuantite.cpp
 //
 // Date creation: 2012-10-01
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 
@@ -23,12 +23,12 @@ typedef std::shared_ptr<Interpolateur> InterpolateurPtr;
 
 void mexFunction(int nlhs, mxArray *plhs[],int nrhs, const mxArray *prhs[])
 {
-  
+
   try {
 #ifndef SANS_LOG
     mexPrintf((idMex + ": DEBUT DE L'INTERPOLATION\n").c_str());
 #endif
-    FILELog::ReportingLevel() = logWARNING; 
+    FILELog::ReportingLevel() = logWARNING;
 
     if (nrhs == 1) {
       mexPrintf((idMex + "\n").c_str());
@@ -111,10 +111,10 @@ void mexFunction(int nlhs, mxArray *plhs[],int nrhs, const mxArray *prhs[])
     mxArray* champMeteo;
     for (int i = 0; i < nbChampsMeteo; i++) {
       nomChampMeteo = mxGetFieldNameByNumber(structMeteo, i);
-      if (nomChampMeteo != "tMin" && nomChampMeteo != "tMax" && 
-          nomChampMeteo != "pluie" && nomChampMeteo != "neige" && 
+      if (nomChampMeteo != "tMin" && nomChampMeteo != "tMax" &&
+          nomChampMeteo != "pluie" && nomChampMeteo != "neige" &&
           nomChampMeteo != "pTot") {
-        
+
         // Est-ce que la meteo a interpoler contient toutes les stations?
         // Si non on interpole pas
         champMeteo = mxGetField(structMeteo, 0, nomChampMeteo.c_str());
@@ -130,13 +130,13 @@ void mexFunction(int nlhs, mxArray *plhs[],int nrhs, const mxArray *prhs[])
     InterpolateurPtr interpolateur;
     // Choix de la methode d'interpolation
     switch (paramInterpolation.type()) {
-    case 1: 
+    case 1:
     {
       FILE_LOG(logINFO) << "Interpolateur choisi: InterpolateurPolygoneThiessen";
       interpolateur = InterpolateurPtr(new InterpolateurPolygoneThiessen(bassinVersant, listeStation, parametres, paramInterpolation, meteoStations, nomsChampsMeteo));
       break;
     }
-    case 3: 
+    case 3:
     {
       FILE_LOG(logINFO) << "Interpolateur choisi: InterpolateurPonderationStations";
       interpolateur = InterpolateurPtr(new InterpolateurPonderationStations(bassinVersant, listeStation, parametres, paramInterpolation, meteoStations, nomsChampsMeteo));
@@ -149,10 +149,10 @@ void mexFunction(int nlhs, mxArray *plhs[],int nrhs, const mxArray *prhs[])
     // Variables de sortie
     FILE_LOG(logINFO) << "Execution de l'interpolation";
     interpolateur->executer();
-    
+
     FILE_LOG(logINFO) << "Ecriture de la meteo interpolee";
     plhs[0] = interpolateur->obtenirMeteoInterpolee();
-    
+
     FILE_LOG(logINFO) << "Fin de l'interpolation";
 
 #ifndef SANS_LOG

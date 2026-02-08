@@ -2,11 +2,11 @@
 // Fichier:  Station.cpp
 //
 // Date creation: 2013-05-13
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #include "stdafx.h"
@@ -44,8 +44,8 @@ float DonneesInterpolation::calculerSommePrecipitaionStation()
 }
 
 //------------------------------------------------------------------
-Interpolateur::Interpolateur(const BassinVersant& bv, const ListeStation& stations, const Parametres& parametres, 
-                             const ParametresInterpolation& paramInterpolation, const DonneesMeteo& meteoStations, 
+Interpolateur::Interpolateur(const BassinVersant& bv, const ListeStation& stations, const Parametres& parametres,
+                             const ParametresInterpolation& paramInterpolation, const DonneesMeteo& meteoStations,
                              const std::vector<std::string>& nomsAutresMeteo, int nbStation)
     : bassinVersant_(bv), stations_(stations), parametres_(parametres),
       paramInterpolation_(paramInterpolation), meteoStations_(meteoStations), nomsAutresMeteo_(nomsAutresMeteo) ,nbStation_(nbStation)
@@ -53,7 +53,7 @@ Interpolateur::Interpolateur(const BassinVersant& bv, const ListeStation& statio
 }
 
 //------------------------------------------------------------------
-Interpolateur::~Interpolateur() 
+Interpolateur::~Interpolateur()
 {
 }
 
@@ -76,7 +76,7 @@ void Interpolateur::initialiserListeCE()
     iterCE++;
   }
 
-  // Insertion pour chaque pas de temps 
+  // Insertion pour chaque pas de temps
   std::vector<DonneesCarreaux> donneesCarreauxTemps;
   int nbPasDeTemps = meteoStations_.nbPasDeTemps();
   for (int i = 0; i < nbPasDeTemps; i++) {
@@ -96,16 +96,16 @@ void Interpolateur::initialiserListeCE()
 void Interpolateur::trouverStationPlusPres(int idxTypeMeteo, int pasDeTemps)
 {
 
-  const unsigned long DIST_INI = ULONG_MAX - 2; 
+  const unsigned long DIST_INI = ULONG_MAX - 2;
   const unsigned long DIST_SEUIL = DIST_INI  + 1;
   const unsigned long DIST_EXCLU = DIST_INI  + 2;
 
   int xCE, yCE, xStation, yStation, distance, idMin;
   unsigned long distanceMin;
-  std::vector<unsigned long> distanceStation; 
-  float distanceReelle; 
+  std::vector<unsigned long> distanceStation;
+  float distanceReelle;
   StationPtr station;
-  
+
   const int quantiteStations = stations_.quantiteStations();
   const int nbCE = (int)donneesCarreauxTemps_.back().back().size();
 
@@ -123,7 +123,7 @@ void Interpolateur::trouverStationPlusPres(int idxTypeMeteo, int pasDeTemps)
       yStation = station->j();
       // Distance au carre
       distance = (xCE - xStation) * (xCE - xStation) + (yCE - yStation) * (yCE - yStation);
-        
+
       // Y'a-t-il des donnes de temperature pour cette station et ce pas de temps
       // Si non, on ne considere pas cette station
       switch (idxTypeMeteo) {
@@ -135,7 +135,7 @@ void Interpolateur::trouverStationPlusPres(int idxTypeMeteo, int pasDeTemps)
         break;
       // Y'a-t-il des donnes de precipitation pour cette station et ce pas de temps
       // Si non, on ne considere pas cette station
-      case  IDX_PRECIPITATION: 
+      case  IDX_PRECIPITATION:
         if(!std::isnan(meteoStations_.valeurs()[pasDeTemps][i].get()->pluie()) &&
            !std::isnan(meteoStations_.valeurs()[pasDeTemps][i].get()->neige())) {
           distanceStation[i] = distance;
@@ -150,10 +150,10 @@ void Interpolateur::trouverStationPlusPres(int idxTypeMeteo, int pasDeTemps)
       }
     }
 
-    // nbStation_ = nombre de stations le plus pres qu'on veut trouver 
+    // nbStation_ = nombre de stations le plus pres qu'on veut trouver
     // Note: Dans le cas ou l'on aurait moins de nbStation, 1 ou des stations avec NaN
-    // seront selectionnees mais avec tellement une grande distance qu'apres ponderation 
-    // leur effet sera negligeable. 
+    // seront selectionnees mais avec tellement une grande distance qu'apres ponderation
+    // leur effet sera negligeable.
     for (int j = 0; j < nbStation_; j++) {
       distanceMin = DIST_SEUIL;
 
@@ -164,10 +164,10 @@ void Interpolateur::trouverStationPlusPres(int idxTypeMeteo, int pasDeTemps)
         }
       }
 
-      // Distance reelle 
+      // Distance reelle
       distanceReelle = (distanceMin == 0 ? 0.25f : (float)distanceMin);
       distanceReelle = std::sqrt(distanceReelle * bassinVersant_.superficieCarreauEntier());
- 
+
       station = stations_.trouverStation(idMin);
       donneesCarreauxTemps_[idxTypeMeteo][pasDeTemps][ce].stations.push_back(station);
       donneesCarreauxTemps_[idxTypeMeteo][pasDeTemps][ce].distancesCE.push_back(distanceReelle);
@@ -184,7 +184,7 @@ int Interpolateur::obtenirNombreAutreMeteo() {
 
 
 //------------------------------------------------------------------
-mxArray* Interpolateur::obtenirMeteoInterpolee() 
+mxArray* Interpolateur::obtenirMeteoInterpolee()
 {
   const int nbPasDeTemps = (int)meteoInterpolee_.size();
   const int nbCE = (int)meteoInterpolee_.back().size();
@@ -196,7 +196,7 @@ mxArray* Interpolateur::obtenirMeteoInterpolee()
   mxArray* neige = mxCreateDoubleMatrix(nbPasDeTemps, nbCE, mxREAL);
 
   std::vector<mxArray**> donnesAutres;
-  // Allocation de la memoire pour chaque champ. 
+  // Allocation de la memoire pour chaque champ.
   for (int idxAutreMeteo = 0; idxAutreMeteo < nbAutreMeteo; idxAutreMeteo++) {
     donnesAutres.push_back((mxArray**)mxMalloc(nbPasDeTemps * sizeof(mxArray*)));
     donnesAutres.back()[0] = mxCreateDoubleMatrix(nbPasDeTemps, nbCE, mxREAL);
@@ -215,7 +215,7 @@ mxArray* Interpolateur::obtenirMeteoInterpolee()
       for (int idxAutreMeteo = 0; idxAutreMeteo < nbAutreMeteo; idxAutreMeteo++) {
         autreData.push_back(meteoInterpolee_[idxPasDeTemps][idxCE]->meteoAutre()[idxAutreMeteo]);
       }
-      
+
       // Le stockage interne d'un mxArray est colonne/ligne
       index = idxPasDeTemps + idxCE * nbPasDeTemps;
       memcpy((void*)(mxGetPr(tMin) + index), (void*)&tMinData , sizeof(double));
@@ -233,7 +233,7 @@ mxArray* Interpolateur::obtenirMeteoInterpolee()
     nbMeteoBase = 3; // tMin, tMax, pTot
   }
   // Assignation des nom de champs
-  const char **nomChamps = new const char*[nbMeteoBase + nbAutreMeteo]; 
+  const char **nomChamps = new const char*[nbMeteoBase + nbAutreMeteo];
   nomChamps[0] = "tMin";
   nomChamps[1] = "tMax";
   if (meteoStations_.estPtot()) {
@@ -244,7 +244,7 @@ mxArray* Interpolateur::obtenirMeteoInterpolee()
     nomChamps[3] = "neige";
   }
 
-  // Assignation des autres noms de champs 
+  // Assignation des autres noms de champs
   std::vector<std::string>::const_iterator champsIter;
   int cntChamp = nbMeteoBase;
   for (champsIter = nomsAutresMeteo_.begin(); champsIter != nomsAutresMeteo_.end(); champsIter++) {

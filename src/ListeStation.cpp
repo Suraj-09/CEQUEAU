@@ -2,11 +2,11 @@
 // Fichier:  Station.h
 //
 // Date creation: 2013-05-13
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #include "stdafx.h"
@@ -16,7 +16,7 @@ ListeStation::ListeStation()
 {
 
 }
- 
+
 ListeStation::~ListeStation()
 {
 
@@ -27,16 +27,16 @@ const StationPtr ListeStation::trouverStation(int id) const
   Stations::const_iterator iterStation = stations_.begin();
 
   while (iterStation != stations_.end()) {
-    
+
     if (iterStation->get()->id() == id) {
       break;
     }
-    
+
     iterStation++;
   }
 
   return *iterStation;
-  
+
 }
 
 const Stations& ListeStation::stations() const
@@ -61,7 +61,7 @@ void ListeStation::initialiser(const mxArray* stations)
   std::string no, nom;
   int iPos, jPos;
   float tp, altitude;
-  
+
   int nbStations = (int)mxGetNumberOfElements(stations);
 
   for (int i = 0; i < nbStations; i++) {

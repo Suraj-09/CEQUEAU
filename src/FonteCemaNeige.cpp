@@ -2,12 +2,12 @@
 // Fichier: FonteCemaNeige.cpp
 //
 // Creation date: 2014-04-15
-// Created by: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Created by:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
-// 
+//                G7S 4R7, QC, Canada
+//
 //****************************************************************************
 #include "stdafx.h"
 #include "FonteCemaNeige.h"
@@ -20,7 +20,7 @@ FonteCemaNeige::FonteCemaNeige()
 //------------------------------------------------------------------
 FonteCemaNeige::FonteCemaNeige(int latitudeMoyenneBV, int nbCE)
                            : Fonte(nbCE, "FonteCemaNeige")
-{ 
+{
   nomChamps_.push_back("eTg");
   nomChamps_.push_back("G");
   nomChamps_.push_back("fonte_reel");
@@ -66,7 +66,7 @@ int FonteCemaNeige::calculerFonte(
 
   // Snow accumulation
   G = G + snow;
-  // eTg = std::max<float>(0.0f,params_.CTg * eTg + (1.0f - params_.CTg) * Tz);  
+  // eTg = std::max<float>(0.0f,params_.CTg * eTg + (1.0f - params_.CTg) * Tz);
   eTg = params_.CTg * eTg + (1.0f - params_.CTg) * Tz;
   eTg = std::min<float>(0.0f,eTg);
   // Potential snowmelt computation
@@ -98,7 +98,7 @@ int FonteCemaNeige::calculerFonte(
   float fonte_reel = ((1.0f - Vmin)*pct_snow + Vmin)*Fpot;
   // Actualisation réservoir neige
   G = G - fonte_reel;
-  
+
   /***** End CemaNeige calculations *****/
 
   // New state preservation
@@ -108,10 +108,10 @@ int FonteCemaNeige::calculerFonte(
 
 
   etatsFonteCE_.push_back(etatFonteCE_);
-  
-  // Available water 
+
+  // Available water
   eauDisponible = fonte_reel + rain;
-  
+
   // Total precipitation
   precipationsTotales = meteo.pluie() + meteo.neige();
 
@@ -178,16 +178,16 @@ int FonteCemaNeige::assimiler(const DateChrono& datePasDeTemps)
           etatsSimules.push_back(*iterCE);
           // TODO New module: Your fields here
           /*** Example
-          AssimilationHelper::assimilerValeur(assimilationsIter->SNC_stockNeigeForet, 
+          AssimilationHelper::assimilerValeur(assimilationsIter->SNC_stockNeigeForet,
                           assimilationsIter->SNC_stockNeigeForetType, iterCE->SNC_stockNeigeForet);
 
-          AssimilationHelper::assimilerValeur(assimilationsIter->SND_stockNeigeClairiere, 
+          AssimilationHelper::assimilerValeur(assimilationsIter->SND_stockNeigeClairiere,
                           assimilationsIter->SND_stockNeigeClairiereType, iterCE->SND_stockNeigeClairiere);
 
-          AssimilationHelper::assimilerValeur(assimilationsIter->QNUI3_indexMurissementNeige, 
+          AssimilationHelper::assimilerValeur(assimilationsIter->QNUI3_indexMurissementNeige,
                           assimilationsIter->QNUI3_indexMurissementNeigeType, iterCE->QNUI3_indexMurissementNeige);
 
-          AssimilationHelper::assimilerValeur(assimilationsIter->QNUI4_indexTempNeige, 
+          AssimilationHelper::assimilerValeur(assimilationsIter->QNUI4_indexTempNeige,
                           assimilationsIter->QNUI4_indexTempNeigeType, iterCE->QNUI4_indexTempNeige);
           ***/
 
@@ -235,7 +235,7 @@ int FonteCemaNeige::initialiserAssimilations(const mxArray* assimilations)
     //datePasDeTemps = MexHelper::datenumToDate(&pasDeTempsData);
     datePasDeTemps = DateChrono::fromMatlabDatenum(pasDeTempsData);
     etatsFonte = MexHelper::mhMxGetField(assimilations, i, "etatsFonte");
-    
+
     /***** Carreaux Entiers *****/
     // Donnees d'assimilation relatives aux CE pour ce pas de temps d'assimilation
     if (mxGetNumberOfElements(etatsFonte) > 0) {
@@ -243,7 +243,7 @@ int FonteCemaNeige::initialiserAssimilations(const mxArray* assimilations)
       idCEData = MexHelper::mhMxGetPr(idCE, "id");
 
       // Obtention des pointeurs de donnees
-      // On utilise mxGetPr plutot que MexHelper::mhMxGetPr pour la possibilite 
+      // On utilise mxGetPr plutot que MexHelper::mhMxGetPr pour la possibilite
       // d'avoir un pointeur null
       // TODO New module: Your fields here.
       /*** Example
@@ -272,16 +272,16 @@ int FonteCemaNeige::initialiserAssimilations(const mxArray* assimilations)
 
         // TODO New module: Your fields here.
         /*** Example
-        AssimilationHelper::obtenirValeursAssim(stockNeigeForetData, etatFonteAssimCE.SNC_stockNeigeForetType, 
+        AssimilationHelper::obtenirValeursAssim(stockNeigeForetData, etatFonteAssimCE.SNC_stockNeigeForetType,
                             j, etatFonteAssimCE.SNC_stockNeigeForet);
 
-        AssimilationHelper::obtenirValeursAssim(stockNeigeClairiereData, etatFonteAssimCE.SND_stockNeigeClairiereType, 
+        AssimilationHelper::obtenirValeursAssim(stockNeigeClairiereData, etatFonteAssimCE.SND_stockNeigeClairiereType,
                             j, etatFonteAssimCE.SND_stockNeigeClairiere);
 
-        AssimilationHelper::obtenirValeursAssim(indexMurissementNeigeData, etatFonteAssimCE.QNUI3_indexMurissementNeigeType, 
+        AssimilationHelper::obtenirValeursAssim(indexMurissementNeigeData, etatFonteAssimCE.QNUI3_indexMurissementNeigeType,
                             j, etatFonteAssimCE.QNUI3_indexMurissementNeige);
 
-        AssimilationHelper::obtenirValeursAssim(indexTempNeigeData, etatFonteAssimCE.QNUI4_indexTempNeigeType, 
+        AssimilationHelper::obtenirValeursAssim(indexTempNeigeData, etatFonteAssimCE.QNUI4_indexTempNeigeType,
                             j, etatFonteAssimCE.QNUI4_indexTempNeige);
         ***/
 
@@ -302,7 +302,7 @@ void FonteCemaNeige::initialiserEtats(const mxArray* etatsInitiaux)
 
   // Pas d'etats precedents, on initialise avec les valeurs par defaut des parametres
   if (etatsInitiaux == NULL) {
-    
+
   for (int i = 0; i < nbCE_; i++) {
       etatFonteCE_.eTg = params_.eTg;
       etatFonteCE_.G = params_.G;
@@ -325,7 +325,7 @@ void FonteCemaNeige::initialiserEtats(const mxArray* etatsInitiaux)
     etatsFonte_.push_back(etatsFonteCE_);
   }
 }
-  
+
 //------------------------------------------------------------------
 void FonteCemaNeige::lireParametres(const mxArray* paramsFonte)
 {

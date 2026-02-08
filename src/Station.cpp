@@ -2,11 +2,11 @@
 // Fichier:  Station.cpp
 //
 // Date creation: 2013-05-13
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #include "stdafx.h"
@@ -19,7 +19,7 @@ Station::Station(std::string no, std::string nom, int id, int i, int j, float mo
 }
 
 //------------------------------------------------------------------
-Station::~Station() 
+Station::~Station()
 {
 }
 

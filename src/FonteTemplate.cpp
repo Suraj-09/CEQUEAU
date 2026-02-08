@@ -2,17 +2,17 @@
 // Fichier: FonteTemplate.cpp
 //
 // Creation date: 2014-04-09
-// Created by: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Created by:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
-// 
+//                G7S 4R7, QC, Canada
+//
 // Usage: Use this template to create you own snow melt module:
 //        1- Copy and paste FonteTemplate.h and FonteTemplate.cpp
-//        2- Rename the new files after your module name (please keep "Fonte" at the beginning). 
+//        2- Rename the new files after your module name (please keep "Fonte" at the beginning).
 //           Example: FonteSomething.h and FonteSomething.cpp
-//        3- Search for "// TODO New module" in the project. These are placeholders for you code.  
+//        3- Search for "// TODO New module" in the project. These are placeholders for you code.
 //           All methods MUST be implemented (see interface fonte.h).
 //
 //****************************************************************************
@@ -27,16 +27,16 @@ FonteTemplate::FonteTemplate()
 //------------------------------------------------------------------
 FonteTemplate::FonteTemplate(int latitudeMoyenneBV, int nbCE)
                            : Fonte(nbCE, "FonteTemplate")
-{ 
+{
   // TODO New module: Field names of your state variables
   /*** Example
   nomChamps_.push_back("stockNeigeForet");
   nomChamps_.push_back("stockNeigeClairiere");
   nomChamps_.push_back("indexMurissementNeige");
-  nomChamps_.push_back("indexTempNeige"); 
+  nomChamps_.push_back("indexTempNeige");
   ***/
 
-  // TODO New module: Field names of the specific weather field(s)  
+  // TODO New module: Field names of the specific weather field(s)
   // needed by your module. By default the available values are:
   // tMin, tMax, pluie, neige. See meteo.h for details.
   // If you want to acces your field from the meteo object:
@@ -88,11 +88,11 @@ int FonteTemplate::calculerFonte(
   ***/
 
   etatsFonteCE_.push_back(etatFonteCE_);
-  
-  // Available water 
+
+  // Available water
   // TODO New module: Your result
-  // eauDisponible = ??? 
-  
+  // eauDisponible = ???
+
   // Total precipitation
   // TODO New module: Your result
   // precipationsTotales = ???
@@ -124,16 +124,16 @@ int FonteTemplate::assimiler(const DateChrono& datePasDeTemps)
           etatsSimules.push_back(*iterCE);
           // TODO New module: Your fields here
           /*** Example
-          AssimilationHelper::assimilerValeur(assimilationsIter->SNC_stockNeigeForet, 
+          AssimilationHelper::assimilerValeur(assimilationsIter->SNC_stockNeigeForet,
                           assimilationsIter->SNC_stockNeigeForetType, iterCE->SNC_stockNeigeForet);
 
-          AssimilationHelper::assimilerValeur(assimilationsIter->SND_stockNeigeClairiere, 
+          AssimilationHelper::assimilerValeur(assimilationsIter->SND_stockNeigeClairiere,
                           assimilationsIter->SND_stockNeigeClairiereType, iterCE->SND_stockNeigeClairiere);
 
-          AssimilationHelper::assimilerValeur(assimilationsIter->QNUI3_indexMurissementNeige, 
+          AssimilationHelper::assimilerValeur(assimilationsIter->QNUI3_indexMurissementNeige,
                           assimilationsIter->QNUI3_indexMurissementNeigeType, iterCE->QNUI3_indexMurissementNeige);
 
-          AssimilationHelper::assimilerValeur(assimilationsIter->QNUI4_indexTempNeige, 
+          AssimilationHelper::assimilerValeur(assimilationsIter->QNUI4_indexTempNeige,
                           assimilationsIter->QNUI4_indexTempNeigeType, iterCE->QNUI4_indexTempNeige);
           ***/
 
@@ -161,7 +161,7 @@ int FonteTemplate::initialiserAssimilations(const mxArray* assimilations)
     return retCode;
   }
 
-  
+
   size_t nbDonnees, nbDonneesCE;
   mxArray *etatsFonte, *idCE;
   double pasDeTempsData, *idCEData;
@@ -182,7 +182,7 @@ int FonteTemplate::initialiserAssimilations(const mxArray* assimilations)
     //datePasDeTemps = MexHelper::datenumToDate(&pasDeTempsData);
     datePasDeTemps = DateChrono::fromMatlabDatenum(pasDeTempsData);
     etatsFonte = MexHelper::mhMxGetField(assimilations, i, "etatsFonte");
-    
+
     /***** Carreaux Entiers *****/
     // Donnees d'assimilation relatives aux CE pour ce pas de temps d'assimilation
     if (mxGetNumberOfElements(etatsFonte) > 0) {
@@ -190,7 +190,7 @@ int FonteTemplate::initialiserAssimilations(const mxArray* assimilations)
       idCEData = MexHelper::mhMxGetPr(idCE, "id");
 
       // Obtention des pointeurs de donnees
-      // On utilise mxGetPr plutot que MexHelper::mhMxGetPr pour la possibilite 
+      // On utilise mxGetPr plutot que MexHelper::mhMxGetPr pour la possibilite
       // d'avoir un pointeur null
       // TODO New module: Your fields here.
       /*** Example
@@ -219,16 +219,16 @@ int FonteTemplate::initialiserAssimilations(const mxArray* assimilations)
 
         // TODO New module: Your fields here.
         /*** Example
-        AssimilationHelper::obtenirValeursAssim(stockNeigeForetData, etatFonteAssimCE.SNC_stockNeigeForetType, 
+        AssimilationHelper::obtenirValeursAssim(stockNeigeForetData, etatFonteAssimCE.SNC_stockNeigeForetType,
                             j, etatFonteAssimCE.SNC_stockNeigeForet);
 
-        AssimilationHelper::obtenirValeursAssim(stockNeigeClairiereData, etatFonteAssimCE.SND_stockNeigeClairiereType, 
+        AssimilationHelper::obtenirValeursAssim(stockNeigeClairiereData, etatFonteAssimCE.SND_stockNeigeClairiereType,
                             j, etatFonteAssimCE.SND_stockNeigeClairiere);
 
-        AssimilationHelper::obtenirValeursAssim(indexMurissementNeigeData, etatFonteAssimCE.QNUI3_indexMurissementNeigeType, 
+        AssimilationHelper::obtenirValeursAssim(indexMurissementNeigeData, etatFonteAssimCE.QNUI3_indexMurissementNeigeType,
                             j, etatFonteAssimCE.QNUI3_indexMurissementNeige);
 
-        AssimilationHelper::obtenirValeursAssim(indexTempNeigeData, etatFonteAssimCE.QNUI4_indexTempNeigeType, 
+        AssimilationHelper::obtenirValeursAssim(indexTempNeigeData, etatFonteAssimCE.QNUI4_indexTempNeigeType,
                             j, etatFonteAssimCE.QNUI4_indexTempNeige);
         ***/
 
@@ -279,7 +279,7 @@ void FonteTemplate::initialiserEtats(const mxArray* etatsInitiaux)
     etatsFonte_.push_back(etatsFonteCE_);
   }
 }
-  
+
 //------------------------------------------------------------------
 void FonteTemplate::lireParametres(const mxArray* paramsFonte)
 {

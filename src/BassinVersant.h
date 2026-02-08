@@ -2,31 +2,31 @@
 // Fichier:  BassinVersant.h
 //
 // Date creation: 2012-10-01
-// Auteur:        
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #pragma once
 
-#include "CarreauEntier.h" 
+#include "CarreauEntier.h"
 #include "CarreauPartiel.h"
 #include "Barrage.h"
 #include "Puits.h"
 
-//! "Smart pointer" de carreau entier. 
+//! "Smart pointer" de carreau entier.
 typedef std::shared_ptr<CarreauEntier> CarreauEntierPtr;
-//! "Smart pointer" de carreau partiel. 
+//! "Smart pointer" de carreau partiel.
 typedef std::shared_ptr<CarreauPartiel> CarreauPartielPtr;
-//! "Smart pointer" de barrage. 
+//! "Smart pointer" de barrage.
 typedef std::shared_ptr<Barrage> BarragePtr;
 //! "Smart pointer" de puits
 typedef std::shared_ptr<Puits> PuitsPtr;
 
 //! Definition du bassin versant.
-/*! 
+/*!
  *  Definition du bassin versant.
  *  NOTE: Il s'agit de la representation
  *  des donnees physiographiques PREPAREES.
@@ -46,7 +46,7 @@ public:
   //! Getter nomBassinVersant
   std::string nomBassinVersant() const;
   //! Getter nbCarreauxEntiers
-  int nbCarreauxEntiers() const; 
+  int nbCarreauxEntiers() const;
   //! Getter nbCarreauxPartiels
   int nbCarreauxPartiels() const;
   //! Getter nbCarreauxPartielsCheminLong
@@ -86,7 +86,7 @@ public:
   const std::vector<PuitsPtr>& puitsParIdCE(int idCE) const;
 
 private:
-  int nbCarreauxEntiers_; 
+  int nbCarreauxEntiers_;
   int nbCarreauxPartiels_;
   std::string nomBassinVersant_;
   /*!
@@ -97,7 +97,7 @@ private:
   int nbCarreauxPartielsCheminLong_;
   //! Superficie des carreaux entier (km**2)
   float superficieCarreauEntier_;
-  
+
   //! Liste des carreaux entiers du bassin versant.
   std::vector<CarreauEntierPtr> carreauxEntiers_;
   //! Liste des carreaux partiels du bassin versant.
@@ -108,7 +108,7 @@ private:
   std::map<int, bool> listeCpBarrage_;
   //! Liste des puits
   std::map<int, std::vector<PuitsPtr>> puits_;
-  
+
   //! Initialisation des carreaux entiers a partir d'une structure Matlab.
   void initialiserCarreauxEntiers(const mxArray* bassinVersant);
   //! Initialisation des carreaux partiels a partir d'une structure Matlab.

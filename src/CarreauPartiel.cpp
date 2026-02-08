@@ -2,11 +2,11 @@
 // Fichier: CarreauPartiel.cpp
 //
 // Date creation: 2012-10-01
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #include "stdafx.h"
@@ -85,7 +85,7 @@ CarreauPartiel::CarreauPartiel(
   // Liste des CP en amont.
   std::copy(idCarreauxPartielsAmont, idCarreauxPartielsAmont + NB_CP_AMONT, idCarreauxPartielsAmont_);
   superficieCPAmont_ = (float)cumulPctSuperficieCPAmont / 100.0f * superficieCarreauEntier;
-  // On met la meme pour l'instant, si besoin sera modifie plus tard. 
+  // On met la meme pour l'instant, si besoin sera modifie plus tard.
   superficieCPAmontCorrige_ = superficieCPAmont_;
 }
 
@@ -97,7 +97,7 @@ CarreauPartiel::~CarreauPartiel()
 
 //------------------------------------------------------------------
 int CarreauPartiel::id() const
-{ 
+{
   FILE_LOG(logDEBUG) << "CarreauPartiel::id()";
   return id_;
 }
@@ -254,7 +254,7 @@ double CarreauPartiel::coeffTransfert() const
 {
   FILE_LOG(logDEBUG) << "CarreauPartiel::coeffTransfert()";
   return coeffTransfert_;
-}  
+}
 
 //------------------------------------------------------------------
 float CarreauPartiel::volumeInitial() const
@@ -328,11 +328,11 @@ int CarreauPartiel::azimutCoursEau() const {
 }
 
 //------------------------------------------------------------------
-void CarreauPartiel::coeffTransfert(double valeur) 
+void CarreauPartiel::coeffTransfert(double valeur)
 {
   FILE_LOG(logDEBUG) << "CarreauPartiel::coeffTransfert(double valeur) ";
   coeffTransfert_ = valeur;
-}  
+}
 
 //------------------------------------------------------------------
 void CarreauPartiel::volumeInitial(float valeur)
@@ -345,6 +345,6 @@ void CarreauPartiel::volumeInitial(float valeur)
 float CarreauPartiel::calculerCorrectionDebit() const
 {
   FILE_LOG(logDEBUG) << "CarreauPartiel::calculerCorrectionDebit()";
-  
+
   return superficieCPAmontCorrige_ / superficieCPAmont_;
 }

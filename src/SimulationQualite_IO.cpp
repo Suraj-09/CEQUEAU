@@ -2,18 +2,18 @@
 // Fichier: Simulation.cpp
 //
 // Date creation: 2012-10-01
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #include "stdafx.h"
 #include "SimulationQualite.h"
 
 //------------------------------------------------------------------
-mxArray* SimulationQualite::obtenirEtatsCP() 
+mxArray* SimulationQualite::obtenirEtatsCP()
 {
   FILE_LOG(logDEBUG) << "SimulationQualite::obtenirEtatsQualiteCP()";
   return obtenirEtatsCP(qualite_);
@@ -28,7 +28,7 @@ mxArray* SimulationQualite::obtenirEtatsCP(const std::vector<Qualite::EtatsCarre
   const size_t n = etatsPasDeTemps.back().size();
 
   // Allocation de la memoire.
-  mxArray** id = (mxArray**)mxMalloc(m * sizeof(mxArray*)); 
+  mxArray** id = (mxArray**)mxMalloc(m * sizeof(mxArray*));
   mxArray** temperature = (mxArray**)mxMalloc(m * sizeof(mxArray*));
   mxArray** qruiss = (mxArray**)mxMalloc(m * sizeof(mxArray*));
   mxArray** qnappe = (mxArray**)mxMalloc(m * sizeof(mxArray*));
@@ -100,7 +100,7 @@ mxArray* SimulationQualite::obtenirEtatsCP(const std::vector<Qualite::EtatsCarre
   }
 
   const char *nomChamps[] = {"id", "temperature", "qruiss", "qnappe", "qhypo",
-                             "qlacma", "qradso", "qradin", "qevap", "qconv", "enerlo", "eneram", "eneres"}; 
+                             "qlacma", "qradso", "qradin", "qevap", "qconv", "enerlo", "eneram", "eneres"};
   int nbChamps = sizeof(nomChamps) / sizeof(char*);
   mxArray* etatsQualiteCP = mxCreateStructMatrix(1, m, nbChamps, nomChamps);
 
@@ -135,7 +135,7 @@ matError SimulationQualite::chargerEtatsCP(Qualite::EtatsCarreauxPartiels& etats
     return retCode;
   }
 
-  const mxArray *etats = etatsPrecedents_; 
+  const mxArray *etats = etatsPrecedents_;
 
   mxArray *etatsCP =  MexHelper::mhMxGetField(etats, 0, "etatsCP");
   // Seule variable d'etat ayant un impact sur les calculs
@@ -144,7 +144,7 @@ matError SimulationQualite::chargerEtatsCP(Qualite::EtatsCarreauxPartiels& etats
   if (temperature != NULL) {
     // Donnees par CP
     int nbCP = (int)mxGetN(temperature);
-  
+
     double* temperatureData = MexHelper::mhMxGetPr(temperature, "temperature");
 
     Qualite::EtatCarreauPartiel etatCarreauPartiel;
@@ -171,12 +171,12 @@ int SimulationQualite::initialiserAssimilations(const mxArray* assimilations)
     return retCode;
   }
 
-  
+
   size_t nbDonnees, nbDonneesCP;
   mxArray *etatsCP, *idCP, *temperature;
   double pasDeTempsData, *idCPData, *temperatureData;
   DateChrono datePasDeTemps;
-     
+
   Qualite::EtatCarreauPartielAssim etatCarreauPartielAssim;
   Qualite::EtatsCarreauxPartielsAssim etatsCarreauxPartielsAssim;
 
@@ -186,7 +186,7 @@ int SimulationQualite::initialiserAssimilations(const mxArray* assimilations)
     MexHelper::chargerValeurs(assimilations, "pasDeTemps", pasDeTempsData, i);
     //datePasDeTemps = MexHelper::datenumToDate(&pasDeTempsData);
     datePasDeTemps = DateChrono::fromMatlabDatenum(pasDeTempsData);
-    
+
     // Donnees d'assimilation relatives aux CP pour ce pas de temps d'assimilation.
     etatsCP = MexHelper::mhMxGetField(assimilations, i, "etatsCP");
     if (mxGetNumberOfElements(etatsCP) > 0) {
@@ -224,7 +224,7 @@ mxArray* SimulationQualite::obtenirEtatsAvantAssimilations()
   std::vector<DateChrono> datesdistinctes;
 
   std::map<DateChrono, Qualite::EtatsCarreauxPartiels>::const_iterator iterCP;
-  
+
   for (iterCP = avantAssimilationsCP_.begin(); iterCP != avantAssimilationsCP_.end(); iterCP++) {
     // Est-ce que cette date existe deja dans la liste?
     if (std::find(datesdistinctes.begin(), datesdistinctes.end(), iterCP->first) == datesdistinctes.end()) {
@@ -236,10 +236,10 @@ mxArray* SimulationQualite::obtenirEtatsAvantAssimilations()
   std::sort(datesdistinctes.begin(), datesdistinctes.end());
   const size_t nbPasDeTemps = datesdistinctes.size();
 
-  const char *nomChamps[] = {"pasDeTemps", "etatsCP"}; 
+  const char *nomChamps[] = {"pasDeTemps", "etatsCP"};
   int nbChamps = sizeof(nomChamps) / sizeof(char*);
   mxArray* etatsAvant = mxCreateStructMatrix(1, nbPasDeTemps, nbChamps, nomChamps);
-  
+
   mxArray *pasDetemps, *etatsCP;
 
   // Variable de travail pour l'appel a "obtenirEtatsCP()"
@@ -250,7 +250,7 @@ mxArray* SimulationQualite::obtenirEtatsAvantAssimilations()
     pasDetemps = mxCreateDoubleMatrix(1,1,mxREAL);
     *mxGetPr(pasDetemps) = MexHelper::dateToDatenum(datesdistinctes[i]);
     mxSetField(etatsAvant, i, "pasDeTemps", pasDetemps);
-    
+
     // Des etatsCP sauvegardes pour cette date?
     if (assimilationsCP_.count(datesdistinctes[i]) > 0) {
       listeEtatsCarreauxPartiels.push_back(avantAssimilationsCP_[datesdistinctes[i]]);

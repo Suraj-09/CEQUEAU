@@ -2,11 +2,11 @@
 // Fichier: ModuleBase.hpp
 //
 // Date creation: 2014-04-01
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #pragma once
@@ -22,7 +22,7 @@ public:
   ModuleBase();
   ModuleBase(int nbCE, std::string nomModele);
   virtual ~ModuleBase();
-  
+
   //! Nom des intrants meteo propre au modele
   std::vector<std::string>& nomsChampsMeteo() {return nomsChampsMeteo_;};
   // ! Nom du modele
@@ -41,7 +41,7 @@ protected:
 
   //! Helper generique pour l'initialisation des etats
   template <typename Type>
-  void initialiserEtatsHelper(const mxArray* etats, std::map<std::string, float*>& champs, 
+  void initialiserEtatsHelper(const mxArray* etats, std::map<std::string, float*>& champs,
                               Type& etatCE, std::vector<Type>& etatsCE);
 
   //! Helper generique pour la sortie des etats en mxArray
@@ -55,10 +55,10 @@ protected:
                                         const std::map<DateChrono, std::vector<Type> >& etatsAvantAssim)
   {
     const size_t nbPasDeTemps = etatsAvantAssim.size();
-    const char *champs[] = {"pasDeTemps", "etatsFonte"}; 
+    const char *champs[] = {"pasDeTemps", "etatsFonte"};
     int nbChamps = sizeof(champs) / sizeof(char*);
     mxArray* etatsAvant = mxCreateStructMatrix(1, nbPasDeTemps, nbChamps, champs);
-  
+
     mxArray *pasDetemps, *etatsFonte;
 
     // Variable de travail pour l'appel a "obtenirEtats()"
@@ -74,7 +74,7 @@ protected:
       //*mxGetPr(pasDetemps) = MexHelper::dateToDatenum(dateAssim);
       *mxGetPr(pasDetemps) = dateAssim.toMatlabDatenum();
       mxSetField(etatsAvant, i, "pasDeTemps", pasDetemps);
-    
+
       listeEtatsCarreauxEntiers.push_back(etatsAvantAssimIter->second);
       etatsFonte = obtenirEtatsHelper(nomChamps, listeEtatsCarreauxEntiers, filtreCE);
       listeEtatsCarreauxEntiers.clear();
@@ -134,7 +134,7 @@ inline void ModuleBase::lireParametresHelper(const mxArray* paramFonte, const st
 
 //------------------------------------------------------------------
 template <typename Type>
-inline void ModuleBase::initialiserEtatsHelper(const mxArray* etats, std::map<std::string, float*>& champs, 
+inline void ModuleBase::initialiserEtatsHelper(const mxArray* etats, std::map<std::string, float*>& champs,
                                                Type& etatCE, std::vector<Type>& etatsCE)
 {
   // Liste des mxArray contenant les valeurs d'un etat pour tous les CE
@@ -199,16 +199,16 @@ inline mxArray* ModuleBase::obtenirEtatsHelper(const std::vector<std::string>& c
   nbCE = (nbTotalCE < nbCE ? nbTotalCE : nbCE);
 
   std::vector<mxArray**> donnesCompletes;
-  // Allocation de la memoire pour chaque champ. 
+  // Allocation de la memoire pour chaque champ.
   for (int i = 0; i < champs.size(); i++) {
     donnesCompletes.push_back((mxArray**)mxMalloc(nbPasDeTemps * sizeof(mxArray*)));
-    // Allocation de la memoire pour chaque pas de temps de chaqie champ. 
+    // Allocation de la memoire pour chaque pas de temps de chaqie champ.
     for (unsigned int i = 0; i < nbPasDeTemps; i++) {
       donnesCompletes.back()[i] = mxCreateDoubleMatrix(1, nbCE, mxREAL);
     }
   }
 
-  typename std::vector<std::vector<Type> >::const_iterator tempsIter; 
+  typename std::vector<std::vector<Type> >::const_iterator tempsIter;
   typename std::vector<Type>::const_iterator etatsIter;
   std::vector<std::string>::const_iterator champsIter;
 
@@ -251,7 +251,7 @@ inline mxArray* ModuleBase::obtenirEtatsHelper(const std::vector<std::string>& c
   }
 
   // Assignation des nom de champs
-  const char **nomChamps = new const char*[champs.size()]; 
+  const char **nomChamps = new const char*[champs.size()];
   cntChamp = 0;
   for (champsIter = champs.begin(); champsIter != champs.end(); champsIter++) {
     nomChamps[cntChamp] = (*champsIter).c_str();
@@ -281,10 +281,10 @@ inline mxArray* ModuleBase::obtenirEtatsHelper(const std::vector<std::string>& c
 //                                             const std::map<date, std::vector<Type>>& etatsAvantAssim)
 //{
 //  const size_t nbPasDeTemps = etatsAvantAssim.size();
-//  const char *champs[] = {"pasDeTemps", "etatsFonte"}; 
+//  const char *champs[] = {"pasDeTemps", "etatsFonte"};
 //  int nbChamps = sizeof(champs) / sizeof(char*);
 //  mxArray* etatsAvant = mxCreateStructMatrix(1, nbPasDeTemps, nbChamps, champs);
-//  
+//
 //  mxArray *pasDetemps, *etatsFonte;
 //
 //  // Variable de travail pour l'appel a "obtenirEtats()"
@@ -299,7 +299,7 @@ inline mxArray* ModuleBase::obtenirEtatsHelper(const std::vector<std::string>& c
 //    dateAssim = etatsAvantAssimIter->first;
 //    *mxGetPr(pasDetemps) = MexHelper::dateToDatenum(dateAssim);
 //    mxSetField(etatsAvant, i, "pasDeTemps", pasDetemps);
-//    
+//
 //    listeEtatsCarreauxEntiers.push_back(etatsAvantAssimIter->second);
 //    etatsFonte = obtenirEtatsHelper(nomChamps, listeEtatsCarreauxEntiers, filtreCE);
 //    listeEtatsCarreauxEntiers.clear();
@@ -311,9 +311,9 @@ inline mxArray* ModuleBase::obtenirEtatsHelper(const std::vector<std::string>& c
 //}
 
 //------------------------------------------------------------------
-inline void ModuleBase::validerParametreSpatial(const std::string& nomChamp, std::vector<float>& champ) 
+inline void ModuleBase::validerParametreSpatial(const std::string& nomChamp, std::vector<float>& champ)
 {
-  int nbValeur = (int)champ.size(); 
+  int nbValeur = (int)champ.size();
 
   // Si plus d'une valeur, on doit avoir un nombre de valeurs egal au nombre de CE.
   if (nbValeur > 1 && nbValeur != nbCE_) {
