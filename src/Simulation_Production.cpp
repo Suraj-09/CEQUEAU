@@ -264,6 +264,7 @@ int Simulation::calculerBilanReservoirs(int noJour, CarreauEntier& carreauEntier
   etatCarreauEntier.niveauEauNappe = HN_niveauEauNappe;
   etatCarreauEntier.niveauEauSol = HS_niveauEauSol;
   etatCarreauEntier.evapoPotJour = evapoPotJour;
+  etatCarreauEntier.ruissellement = RIMP_ruissellementSufaceImper + RUISS_ruissellementSurface;
   // Stockage en metres cube
   etatCarreauEntier.production = 1000.0f * CEKM2_superficieKm2 * REST_eauDisponibleCE;
   etatCarreauEntier.recharge = 0.0f;

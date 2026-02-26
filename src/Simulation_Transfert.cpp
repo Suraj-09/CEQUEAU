@@ -2,15 +2,15 @@
 // Fichier: Simulation.cpp
 //
 // Date creation: 2012-10-01
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #include "stdafx.h"
-#include "Simulation.h" 
+#include "Simulation.h"
 
 //------------------------------------------------------------------
 int Simulation::executerTransfert(const int& nbTransfertsParJour, const DateChrono& datePasDeTemps,
@@ -34,7 +34,7 @@ int Simulation::executerTransfert(const int& nbTransfertsParJour, const DateChro
 	// Accumulateur du volume evacue des barrages.
 	std::map<int, float> volumeEntrantBarrages;
 	std::map<int, float> volumeEvacueBarrages;
-	// Details du volume evacue dans le cas ou il y aurait plus d'une regle 
+	// Details du volume evacue dans le cas ou il y aurait plus d'une regle
 	// d'evacuation (barrage type 5)
 	std::map<int, std::vector<float> > volumesEvacuesBarrages;
 

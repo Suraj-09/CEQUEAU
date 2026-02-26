@@ -384,7 +384,7 @@ Each state structure (e.g., `etatsCE`, `etatsCP`) follows a pattern:
 
 -   `assimilations.quantite.etatsCE`:
     -   `id`: CE IDs.
-    -   `niveauEauSol`, `niveauEauNappe`, `niveauEauLacsMarais`, `evapoPotJour`, `production`.
+    -   `niveauEauSol`, `niveauEauNappe`, `niveauEauLacsMarais`, `evapoPotJour`, `ruissellement`, `production`.
 -   `assimilations.quantite.etatsCP`:
     -   `id`: CP IDs.
     -   `apport`, `volume`, `debit`.
@@ -424,6 +424,7 @@ States for Whole Cells (or subset defined by `execution.resultatsIdCE`).
 -   `niveauEauNappe`: `[1 x nbCE double]` - Groundwater level.
 -   `niveauEauLacsMarais`: `[1 x nbCE double]` - Lake/marsh water level.
 -   `evapoPotJour`: `[1 x nbCE double]` - Daily potential evapotranspiration.
+-   `ruissellement`: `[1 x nbCE double]` - Daily impervious and surface runoff.
 -   `production`: `[1 x nbCE double]` - Water production.
 
 #### 2. `etatsCP` `[1 x nbPasDeTemps struct]`

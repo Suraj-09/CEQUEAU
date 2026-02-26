@@ -12,7 +12,7 @@ private:
 
 public:
     Puits(int id, int active, double distance, double niveauInitial, double rayonP, std::vector<double> niveaux, std::vector<double> debit);
-    
+
     int getIdCE() const;
     int getActive() const;
     double getDistanceRiviere() const;

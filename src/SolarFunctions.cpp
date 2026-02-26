@@ -34,7 +34,7 @@ void SolarFunctions::computeZenithAngle(float hours)
 	{
 		sunpos_1950(udtTime_, udtLocation_, &udtSunCoordinates_);
 	}
-	
+
 	// udtSunCoordinates_.dZenithAngle
 	// return udtSunCoordinates.dZenithAngle;
 }

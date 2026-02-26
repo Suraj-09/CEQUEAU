@@ -2,11 +2,11 @@
 // Fichier:  Station.cpp
 //
 // Date creation: 2013-05-13
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #include "stdafx.h"
@@ -14,7 +14,7 @@
 
 //------------------------------------------------------------------
 InterpolateurPolygoneThiessen::InterpolateurPolygoneThiessen(const BassinVersant& bv, const ListeStation& stations, const Parametres& parametres,
-                               const ParametresInterpolation& paramInterpolation, const DonneesMeteo& meteoStations, 
+                               const ParametresInterpolation& paramInterpolation, const DonneesMeteo& meteoStations,
                                const std::vector<std::string>& nomsAutresMeteo)
   : Interpolateur(bv, stations, parametres, paramInterpolation, meteoStations, nomsAutresMeteo, 1)
 {
@@ -50,12 +50,12 @@ void InterpolateurPolygoneThiessen::calculerCorrections(int idxTypeMeteo, int pa
   iterCE = donneesCarreauxTemps_[idxTypeMeteo][pasDeTemps].begin();
   while(iterCE != donneesCarreauxTemps_[idxTypeMeteo][pasDeTemps].end()) {
     diffAltitude = (iterCE->CE->altitude() - iterCE->stations[0]->altitude());
-    
+
     if (idxTypeMeteo == IDX_TEMPERATURE) {
       correction = diffAltitude * paramInterpolation_.coet() / 1000.0f;
     }
     else if (idxTypeMeteo == IDX_PRECIPITATION) {
-      correction = 1.0f + diffAltitude * paramInterpolation_.coep() / 
+      correction = 1.0f + diffAltitude * paramInterpolation_.coep() /
                             iterCE->stations[0]->moyAnPrecipitation();
     }
     else {
@@ -90,13 +90,13 @@ void InterpolateurPolygoneThiessen::interpoler(int pasDeTemps)
       idStation = donneesInterpolation->stations[0].get()->id();
       meteo = meteoStations_.valeurs()[pasDeTemps][idStation].get();
       autre = 0.0f;
-      
+
       if (idxMeteo == IDX_TEMPERATURE) {
         tMin = meteo->tMin();
         tMax = meteo->tMax();
         tMin += donneesInterpolation->correction;
         tMax += donneesInterpolation->correction;
-      } 
+      }
       else if (idxMeteo == IDX_PRECIPITATION) {
         pluie = meteo->pluie();
         neige = meteo->neige();

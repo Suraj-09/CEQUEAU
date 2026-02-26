@@ -2,17 +2,17 @@
 // Fichier: EvapoTemplate.cpp
 //
 // Creation date: 2014-04-09
-// Created by: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Created by:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
-// 
+//                G7S 4R7, QC, Canada
+//
 // Usage: Use this template to create you own snow melt module:
 //        1- Copy and paste EvapoTemplate.h and EvapoTemplate.cpp
-//        2- Rename the new files after your module name (please keep "Evapo" at the beginning). 
+//        2- Rename the new files after your module name (please keep "Evapo" at the beginning).
 //           Example: EvapoSomething.h and EvapoSomething.cpp
-//        3- Search for "// TODO New module" in the project. These are placeholders for you code.  
+//        3- Search for "// TODO New module" in the project. These are placeholders for you code.
 //           All methods MUST be implemented (see interface Evapo.h).
 //
 //****************************************************************************
@@ -27,14 +27,14 @@ EvapoTemplate::EvapoTemplate()
 //------------------------------------------------------------------
 EvapoTemplate::EvapoTemplate(int latitudeMoyenneBV, int nbCE, int pasParJour)
                            : Evapo(nbCE, "EvapoCequeau"), pasParJour_(pasParJour)
-{ 
+{
   // TODO New module: Field names of your state variables
   /*** Example
   nomChamps_.push_back("stateVar1");
   nomChamps_.push_back("stateVar2");
   ***/
 
-  // TODO New module: Field names of the specific weather field(s)  
+  // TODO New module: Field names of the specific weather field(s)
   // needed by your module. By default the available values are:
   // tMin, tMax, pluie, neige. See meteo.h for details.
   // If you want to acces your field from the meteo object:
@@ -87,13 +87,13 @@ int EvapoTemplate::calculerEvapo(
   ***/
 
   etatsEvapoCE_.push_back(etatEvapoCE_);
-  
+
   // TODO New module: Your result
   //evapotranspirationSol = ???;
   //evapotranspirationNappe = ???;
   //evaporationLac = ???;
   //evapotranspirationPotentielle = ???;
-  
+
 
   return 0;
 }
@@ -122,10 +122,10 @@ int EvapoTemplate::assimiler(const DateChrono& datePasDeTemps)
           etatsSimules.push_back(*iterCE);
           // TODO New module: Your fields here
           /*** Example
-          AssimilationHelper::assimilerValeur(assimilationsIter->stateVar1, 
+          AssimilationHelper::assimilerValeur(assimilationsIter->stateVar1,
                           assimilationsIter->stateVar1Type, iterCE->stateVar1);
 
-          AssimilationHelper::assimilerValeur(assimilationsIter->stateVar2, 
+          AssimilationHelper::assimilerValeur(assimilationsIter->stateVar2,
                           assimilationsIter->stateVar2Type, iterCE->stateVar2);
 
           ***/
@@ -154,10 +154,10 @@ int EvapoTemplate::initialiserAssimilations(const mxArray* assimilations)
     return retCode;
   }
 
-  
+
   size_t nbDonnees, nbDonneesCE;
   mxArray *etatsEvapo, *idCE;
-  double pasDeTempsData, *idCEData; 
+  double pasDeTempsData, *idCEData;
   DateChrono datePasDeTemps;
   EtatEvapoAssimCE etatEvapoAssimCE;
   std::vector<EtatEvapoAssimCE> etatsEvapoAssimCE;
@@ -175,7 +175,7 @@ int EvapoTemplate::initialiserAssimilations(const mxArray* assimilations)
     //datePasDeTemps = MexHelper::datenumToDate(&pasDeTempsData);
     datePasDeTemps = DateChrono::fromMatlabDatenum(pasDeTempsData);
     etatsEvapo = MexHelper::mhMxGetField(assimilations, i, "etatsEvapo");
-    
+
     /***** Carreaux Entiers *****/
     // Donnees d'assimilation relatives aux CE pour ce pas de temps d'assimilation
     if (mxGetNumberOfElements(etatsEvapo) > 0) {
@@ -183,10 +183,10 @@ int EvapoTemplate::initialiserAssimilations(const mxArray* assimilations)
       idCEData = MexHelper::mhMxGetPr(idCE, "id");
 
       // Obtention des pointeurs de donnees
-      // On utilise mxGetPr plutot que MexHelper::mhMxGetPr pour la possibilite 
+      // On utilise mxGetPr plutot que MexHelper::mhMxGetPr pour la possibilite
       // d'avoir un pointeur null
       // TODO New module: Your fields here.
-      /*** Example 
+      /*** Example
       stateVar1 = MexHelper::mhMxGetField(etatsEvapo, 0, "stateVar1");
       etatEvapoAssimCE.stateVar1Type = AssimilationHelper::obtenirTypeAssim(stateVar1);
       stateVar1Data = mxGetPr(stateVar1);
@@ -203,11 +203,11 @@ int EvapoTemplate::initialiserAssimilations(const mxArray* assimilations)
         etatEvapoAssimCE.idCarreauEntier = (int)idCEData[j];
 
         // TODO New module: Your fields here.
-        /*** Example 
-        AssimilationHelper::obtenirValeursAssim(stateVar1Data, etatEvapoAssimCE.stateVar1Type, 
+        /*** Example
+        AssimilationHelper::obtenirValeursAssim(stateVar1Data, etatEvapoAssimCE.stateVar1Type,
                             j, etatEvapoAssimCE.stateVar1);
 
-        AssimilationHelper::obtenirValeursAssim(stateVar2Data, etatEvapoAssimCE.stateVar2Type, 
+        AssimilationHelper::obtenirValeursAssim(stateVar2Data, etatEvapoAssimCE.stateVar2Type,
                             j, etatEvapoAssimCE.stateVar2);
         ***/
 
@@ -254,7 +254,7 @@ void EvapoTemplate::initialiserEtats(const mxArray* etatsInitiaux)
     etatsEvapo_.push_back(etatsEvapoCE_);
   }
 }
-  
+
 //------------------------------------------------------------------
 void EvapoTemplate::lireParametres(const mxArray* paramsEvapo)
 {

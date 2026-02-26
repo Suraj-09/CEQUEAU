@@ -2,18 +2,18 @@
 // Fichier: CarreauEntier.h
 //
 // Date creation: 2012-10-01
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #pragma once
-#include "Parametres.h" 
+#include "Parametres.h"
 
 //! Definition d'un carreau entier.
-/*! 
+/*!
  *  Definition d'un carreau entier
  *  selon les donnees physiographiques PREPAREES.
  */
@@ -31,7 +31,7 @@ public:
   //! Constructeur
   CarreauEntier(int id, int i, int j, int pctLacRiviere, int pctForet, int pctMarais, int pctLacExutoire, float altitude, float latitude, float longitude, float meanSlope);
   ~CarreauEntier();
-  
+
   //! Getter id
   int id() const;
   //! Getter pctLacRiviere
@@ -72,7 +72,7 @@ public:
   /*!
     Coefficient de ponderation utilise dans les calculs
     d'evapotranspiration et d'infiltration.
-    varie de 0.8 si le carreau entier est completement deboise, 
+    varie de 0.8 si le carreau entier est completement deboise,
     a 1.0 si la foret recouvre totalement le carreau.
   */
   float calculerCoeffPonderation() const;
@@ -82,7 +82,7 @@ public:
   float altitude() const;
   //! Setter altitude
   void altitude(float val);
-  //! Getter latitude 
+  //! Getter latitude
   float latitude() const;
   //! Getter longitude
   float longitude() const;

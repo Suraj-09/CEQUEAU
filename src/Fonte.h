@@ -2,11 +2,11 @@
 // Fichier: Fonte.h
 //
 // Date creation: 2014-03-11
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #pragma once
@@ -21,12 +21,12 @@ class Fonte: public ModuleBase
 public:
   //! Constructeur.
   Fonte() {};
-  
+
   Fonte(int nbCE, std::string nomModele)
     : ModuleBase(nbCE, nomModele) {}
-  
+
   virtual ~Fonte() {};
-  
+
   virtual int calculerFonte(
   // IN
   const DateChrono& datePasDeTemps,

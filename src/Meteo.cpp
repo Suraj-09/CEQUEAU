@@ -2,11 +2,11 @@
 // Fichier: Meteo.cpp
 //
 // Date creation: 2012-10-01
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #include "stdafx.h"

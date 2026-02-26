@@ -2,11 +2,11 @@
 // Fichier: Simulation.cpp
 //
 // Date creation: 2012-10-01
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #include "stdafx.h"
@@ -34,19 +34,22 @@ int Simulation::assimiler(const DateChrono& datePasDeTemps, EtatsCarreauxEntiers
           // Sauvegarde de l'etat avant l'assimilation
           etatsSimules.push_back(*iterCE);
 
-          AssimilationHelper::assimilerValeur(assimilationsIter->niveauEauSol, 
+          AssimilationHelper::assimilerValeur(assimilationsIter->niveauEauSol,
                           assimilationsIter->niveauEauSolType, iterCE->niveauEauSol);
 
-          AssimilationHelper::assimilerValeur(assimilationsIter->niveauEauNappe, 
+          AssimilationHelper::assimilerValeur(assimilationsIter->niveauEauNappe,
                           assimilationsIter->niveauEauNappeType, iterCE->niveauEauNappe);
 
-          AssimilationHelper::assimilerValeur(assimilationsIter->niveauEauLacsMarais, 
+          AssimilationHelper::assimilerValeur(assimilationsIter->niveauEauLacsMarais,
                           assimilationsIter->niveauEauLacsMaraisType, iterCE->niveauEauLacsMarais);
 
-          AssimilationHelper::assimilerValeur(assimilationsIter->evapoPotJour, 
+          AssimilationHelper::assimilerValeur(assimilationsIter->evapoPotJour,
                           assimilationsIter->evapoPotJourType, iterCE->evapoPotJour);
 
-          AssimilationHelper::assimilerValeur(assimilationsIter->production, 
+          AssimilationHelper::assimilerValeur(assimilationsIter->ruissellement,
+                          assimilationsIter->ruissellementType, iterCE->ruissellement);
+
+          AssimilationHelper::assimilerValeur(assimilationsIter->production,
                           assimilationsIter->productionType, iterCE->production);
 
           break;
@@ -85,13 +88,13 @@ int Simulation::assimiler(const DateChrono& datePasDeTemps, EtatsCarreauxPartiel
           // Sauvegarde de l'etat avant l'assimilation
           etatsSimules.push_back(*iterCP);
 
-          AssimilationHelper::assimilerValeur(assimilationsIter->apport, 
+          AssimilationHelper::assimilerValeur(assimilationsIter->apport,
                           assimilationsIter->apportType, iterCP->apport);
 
-          AssimilationHelper::assimilerValeur(assimilationsIter->volume, 
+          AssimilationHelper::assimilerValeur(assimilationsIter->volume,
                           assimilationsIter->volumeType, iterCP->volume);
 
-          AssimilationHelper::assimilerValeur(assimilationsIter->debit, 
+          AssimilationHelper::assimilerValeur(assimilationsIter->debit,
                           assimilationsIter->debitType, iterCP->debit);
 
           break;
@@ -122,8 +125,8 @@ int Simulation::assimiler(const DateChrono& datePasDeTemps, EtatsBarrages& etats
     for (const auto& assimilation : assimilations) {
       for (auto& etat : etatsBarrages) {
         if (etat.idCarreauPartiel == assimilation.idCarreauPartiel) {
-            etatsSimules.push_back(etat); 
-            
+            etatsSimules.push_back(etat);
+
             AssimilationHelper::assimilerValeur(assimilation.volume, assimilation.volumeType, etat.volume);
             AssimilationHelper::assimilerValeur(assimilation.niveau, assimilation.niveauType, etat.niveau);
             break;
@@ -153,12 +156,12 @@ int Simulation::assimiler(const DateChrono& datePasDeTemps, EtatsBarrages& etats
   //         // Sauvegarde de l'etat avant l'assimilation
   //         etatsSimules.push_back(*iterBarrages);
 
-  //         AssimilationHelper::assimilerValeur(assimilationsIter->volume, 
+  //         AssimilationHelper::assimilerValeur(assimilationsIter->volume,
   //                         assimilationsIter->volumeType, iterBarrages->volume);
 
-  //         AssimilationHelper::assimilerValeur(assimilationsIter->niveau, 
+  //         AssimilationHelper::assimilerValeur(assimilationsIter->niveau,
   //                         assimilationsIter->niveauType, iterBarrages->niveau);
-          
+
   //         break;
   //       }
   //     } // for

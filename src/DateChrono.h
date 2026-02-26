@@ -31,7 +31,7 @@ public:
     DateChrono operator-(int days) const;
     DateChrono& operator+=(int days);
 
-    
+
 
     // Conversion to MATLAB datenum
     double toMatlabDatenum() const;

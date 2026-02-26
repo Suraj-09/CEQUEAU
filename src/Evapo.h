@@ -2,11 +2,11 @@
 // Fichier: Evapo.h
 //
 // Date creation: 2014-04-02
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #pragma once
@@ -21,12 +21,12 @@ class Evapo: public ModuleBase
 public:
   //! Constructeur.
   Evapo() {};
-  
+
   Evapo(int nbCE, std::string nomModele)
     : ModuleBase(nbCE, nomModele) {}
-  
+
   virtual ~Evapo() {};
-  
+
   virtual int calculerEvapo(
     // IN
     const int& noJour,

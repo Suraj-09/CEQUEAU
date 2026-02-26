@@ -2,17 +2,17 @@
 // Fichier: EvapoPenmanMont.cpp
 //
 // Creation date: 2014-04-09
-// Created by: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Created by:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
-// 
+//                G7S 4R7, QC, Canada
+//
 // Usage: Use this template to create you own snow melt module:
 //        1- Copy and paste EvapoPenmanMont.h and EvapoPenmanMont.cpp
-//        2- Rename the new files after your module name (please keep "Evapo" at the beginning). 
+//        2- Rename the new files after your module name (please keep "Evapo" at the beginning).
 //           Example: EvapoSomething.h and EvapoSomething.cpp
-//        3- Search for "// TODO New module" in the project. These are placeholders for you code.  
+//        3- Search for "// TODO New module" in the project. These are placeholders for you code.
 //           All methods MUST be implemented (see interface Evapo.h).
 //
 //****************************************************************************
@@ -28,14 +28,14 @@ EvapoPenmanMont::EvapoPenmanMont()
 //------------------------------------------------------------------
 EvapoPenmanMont::EvapoPenmanMont(int latitudeMoyenneBV, int nbCE, int pasParJour)
                            : Evapo(nbCE, "EvapoPenmanMont"), pasParJour_(pasParJour)
-{ 
+{
   // TODO New module: Field names of your state variables
   /*** Example
   nomChamps_.push_back("stateVar1");
   nomChamps_.push_back("stateVar2");
   ***/
 
-  // TODO New module: Field names of the specific weather field(s)  
+  // TODO New module: Field names of the specific weather field(s)
   // needed by your module. By default the available values are:
   // tMin, tMax, pluie, neige. See meteo.h for details.
   // If you want to acces your field from the meteo object:
@@ -80,13 +80,13 @@ int EvapoPenmanMont::calculerEvapo(
   }
 
   EtatEvapoCE& etatEvapoCE = etatsEvapo_.back().at(indexCE);
- 
+
   // TODO New module: Put your calculation below
   // Pour faciliter la comprehension, les variables sont prefixees du nom des variables
   // telles que definies dans le manuel Cequeau.
 
   float TJE_tempMoy = meteo.calculerTempMoy();
-  
+
   // Initialisation des variables météo - même ordre que lors de la déclaration des champs plus haut
   float airPressure = meteo.meteoEvapo().at(0);
   float heatStorage = meteo.meteoEvapo().at(1);;
@@ -97,7 +97,7 @@ int EvapoPenmanMont::calculerEvapo(
 
   float ARR27_coeffPonderation = carreauEntier.calculerCoeffPonderation();
   float HNAPS_seuilVidangeHauteNappe = carreauEntier.param().seuilVidangeHauteNappe;
- 
+
   float HN_niveauEauNappe = niveauEauNappe;
 
   float PENMONT_evapoPotJour = 0.0f;
@@ -110,15 +110,15 @@ int EvapoPenmanMont::calculerEvapo(
     ETRLAC_evapoReelleLac = 0.8f * PENMONT_evapoPotJour;
 
     float ETOT_evapoPotSol = PENMONT_evapoPotJour * ARR27_coeffPonderation;
-    float evapoCalcul = 
-      minf(EVNAP_fractionEvapoNappe, 
+    float evapoCalcul =
+      minf(EVNAP_fractionEvapoNappe,
                       EVNAP_fractionEvapoNappe * HN_niveauEauNappe / (HNAPS_seuilVidangeHauteNappe + 25.4f));
 
     ETRNAP_evapoNappe = minf(HN_niveauEauNappe, ETOT_evapoPotSol * evapoCalcul);
     HN_niveauEauNappe = HN_niveauEauNappe - ETRNAP_evapoNappe;
     ETRSOL_evapoSol = ETOT_evapoPotSol - ETRNAP_evapoNappe;
   }
-  
+
   // New state preservation
   // TODO New module: Add your variables
   /*** Example
@@ -127,15 +127,15 @@ int EvapoPenmanMont::calculerEvapo(
   ***/
 
   etatsEvapoCE_.push_back(etatEvapoCE_);
-  
+
   // TODO New module: Your result
-  
+
   // resultats
   evapotranspirationSol = ETRSOL_evapoSol;
   evapotranspirationNappe = ETRNAP_evapoNappe;
   evaporationLac = ETRLAC_evapoReelleLac;
   evapotranspirationPotentielle = PENMONT_evapoPotJour;
- 
+
 
   return 0;
 }
@@ -164,10 +164,10 @@ int EvapoPenmanMont::assimiler(const DateChrono& datePasDeTemps)
           etatsSimules.push_back(*iterCE);
           // TODO New module: Your fields here
           /*** Example
-          AssimilationHelper::assimilerValeur(assimilationsIter->stateVar1, 
+          AssimilationHelper::assimilerValeur(assimilationsIter->stateVar1,
                           assimilationsIter->stateVar1Type, iterCE->stateVar1);
 
-          AssimilationHelper::assimilerValeur(assimilationsIter->stateVar2, 
+          AssimilationHelper::assimilerValeur(assimilationsIter->stateVar2,
                           assimilationsIter->stateVar2Type, iterCE->stateVar2);
 
           ***/
@@ -195,10 +195,10 @@ int EvapoPenmanMont::initialiserAssimilations(const mxArray* assimilations)
   if (assimilations == NULL) {
     return retCode;
   }
-    
+
   size_t nbDonnees, nbDonneesCE;
   mxArray *etatsEvapo, *idCE;
-  double pasDeTempsData, *idCEData; 
+  double pasDeTempsData, *idCEData;
   DateChrono datePasDeTemps;
   EtatEvapoAssimCE etatEvapoAssimCE;
   std::vector<EtatEvapoAssimCE> etatsEvapoAssimCE;
@@ -217,7 +217,7 @@ int EvapoPenmanMont::initialiserAssimilations(const mxArray* assimilations)
     datePasDeTemps = DateChrono::fromMatlabDatenum(pasDeTempsData);
 
     etatsEvapo = MexHelper::mhMxGetField(assimilations, i, "etatsEvapo");
-    
+
     /***** Carreaux Entiers *****/
     // Donnees d'assimilation relatives aux CE pour ce pas de temps d'assimilation
     if (mxGetNumberOfElements(etatsEvapo) > 0) {
@@ -225,10 +225,10 @@ int EvapoPenmanMont::initialiserAssimilations(const mxArray* assimilations)
       idCEData = MexHelper::mhMxGetPr(idCE, "id");
 
       // Obtention des pointeurs de donnees
-      // On utilise mxGetPr plutot que MexHelper::mhMxGetPr pour la possibilite 
+      // On utilise mxGetPr plutot que MexHelper::mhMxGetPr pour la possibilite
       // d'avoir un pointeur null
       // TODO New module: Your fields here.
-      /*** Example 
+      /*** Example
       stateVar1 = MexHelper::mhMxGetField(etatsEvapo, 0, "stateVar1");
       etatEvapoAssimCE.stateVar1Type = AssimilationHelper::obtenirTypeAssim(stateVar1);
       stateVar1Data = mxGetPr(stateVar1);
@@ -245,11 +245,11 @@ int EvapoPenmanMont::initialiserAssimilations(const mxArray* assimilations)
         etatEvapoAssimCE.idCarreauEntier = (int)idCEData[j];
 
         // TODO New module: Your fields here.
-        /*** Example 
-        AssimilationHelper::obtenirValeursAssim(stateVar1Data, etatEvapoAssimCE.stateVar1Type, 
+        /*** Example
+        AssimilationHelper::obtenirValeursAssim(stateVar1Data, etatEvapoAssimCE.stateVar1Type,
                             j, etatEvapoAssimCE.stateVar1);
 
-        AssimilationHelper::obtenirValeursAssim(stateVar2Data, etatEvapoAssimCE.stateVar2Type, 
+        AssimilationHelper::obtenirValeursAssim(stateVar2Data, etatEvapoAssimCE.stateVar2Type,
                             j, etatEvapoAssimCE.stateVar2);
         ***/
 
@@ -296,12 +296,12 @@ void EvapoPenmanMont::initialiserEtats(const mxArray* etatsInitiaux)
     etatsEvapo_.push_back(etatsEvapoCE_);
   }
 }
-  
+
 //------------------------------------------------------------------
 void EvapoPenmanMont::lireParametres(const mxArray* paramsEvapo)
 {
   // TODO New module: Your parameters here.
-   
+
 	lireParametresHelper(paramsEvapo, "evnap" , params_.fractionEvapoNappe);
   /*** Example
   lireParametresHelper(paramsEvapo, "anotherParam", params_.param2);
@@ -332,7 +332,7 @@ float EvapoPenmanMont::calculerSlopeSatVapPressure(float tempMoy) const
 
   float calcul = static_cast<float>(4098*(0.6108*std::exp((17.27*(float)tempMoy)/((float)tempMoy+237.3)))/std::pow(((float)tempMoy+237.3),2));
 
-  return calcul; 
+  return calcul;
 }
 
 
@@ -341,7 +341,7 @@ float EvapoPenmanMont::calculerPsychometricConstant(float airPressure) const
 
   float calcul = 0.665f*0.001f*airPressure; // Proulx-McInnis et al. (2013)
 
-  return calcul; 
+  return calcul;
 }
 
 float EvapoPenmanMont::calculerPenmanMont(float tempMoy, float airPressure, float rayonnement, float heatStorage, float humidity, float vitesseVent) const
@@ -360,7 +360,7 @@ float EvapoPenmanMont::calculerPenmanMont(float tempMoy, float airPressure, floa
 
 	// Core equation
 	float calcul = static_cast<float>((0.408f*calculerSlopeSatVapPressure((float) tempMoy)*((float) rayonnement-(float) heatStorage)+
-		calculerPsychometricConstant((float) airPressure)*900.0f/((float) tempMoy+273.0f)* 
+		calculerPsychometricConstant((float) airPressure)*900.0f/((float) tempMoy+273.0f)*
 		(float) vitesseVent*(satPres-vapPres))/
 		(calculerSlopeSatVapPressure((float) tempMoy)+calculerPsychometricConstant((float) airPressure)*(1.0f+0.34f*(float) vitesseVent)));
   return calcul;

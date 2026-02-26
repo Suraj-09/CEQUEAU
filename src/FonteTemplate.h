@@ -2,17 +2,17 @@
 // Fichier: FonteTemplate.h
 //
 // Creation date: 2014-04-09
-// Created by: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Created by:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
-// 
+//                G7S 4R7, QC, Canada
+//
 // Usage: Use this template to create you own snow melt module:
 //        1- Copy and paste FonteTemplate.h and FonteTemplate.cpp
-//        2- Rename the new files after your module name (please keep "Fonte" at the beginning). 
+//        2- Rename the new files after your module name (please keep "Fonte" at the beginning).
 //           Example: FonteSomething.h and FonteSomething.cpp
-//        3- Search for "// TODO New module" in the project. These are placeholders for you code.  
+//        3- Search for "// TODO New module" in the project. These are placeholders for you code.
 //           All methods MUST be implemented (see interface fonte.h).
 //
 //****************************************************************************
@@ -63,7 +63,7 @@ private:
     std::vector<float> seuilTempFonteClairiere;
     ***/
   } params_;
-  
+
   // State variables
   class EtatFonteCE
   {

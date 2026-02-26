@@ -2,18 +2,18 @@
 // Fichier:  Station.h
 //
 // Date creation: 2013-05-13
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #pragma once
 #include <string>
 
 //! Definition d'une station meteo.
-class Station 
+class Station
 {
 public:
   //! Constructeur.

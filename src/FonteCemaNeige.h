@@ -2,12 +2,12 @@
 // Fichier: FonteCemaNeige.h
 //
 // Creation date: 2014-04-15
-// Created by: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Created by:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
-// 
+//                G7S 4R7, QC, Canada
+//
 //****************************************************************************
 #pragma once
 
@@ -78,13 +78,13 @@ private:
     // vitesse atteinte quand le stock est très faible)
     float Vmin;
     // Initial values for the state variables
-    
+
     // Thermal of the snowpack
     float eTg;
     // Snow accumulation
     float G;
   } params_;
-  
+
   std::tuple<float, float> split_precip_cequeau(Meteo meteo);
   // Donnees a assimiler
   class EtatFonteAssimCE

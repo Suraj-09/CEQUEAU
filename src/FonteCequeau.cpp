@@ -2,11 +2,11 @@
 // Fichier: FonteCequeau.cpp
 //
 // Date creation: 2014-03-11
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #include "stdafx.h"
@@ -195,7 +195,7 @@ int FonteCequeau::calculerFonte(
 			PJC_pluieForet * carreauEntier.pctForet()) / surfaceTotale);
 	etatFonteCE_.eauDisponible = eauDisponible;
 
-	// 3- Precipitations totales calculees par le modele 
+	// 3- Precipitations totales calculees par le modele
 	precipationsTotales = PJE_pluie + PJN_neige;
 
 	etatsFonteCE_.push_back(etatFonteCE_);
@@ -286,7 +286,7 @@ int FonteCequeau::initialiserAssimilations(const mxArray* assimilations) {
 			idCEData = MexHelper::mhMxGetPr(idCE, "id");
 
 			// Obtention des pointeurs de donnees
-			// On utilise mxGetPr plutot que MexHelper::mhMxGetPr pour la possibilite 
+			// On utilise mxGetPr plutot que MexHelper::mhMxGetPr pour la possibilite
 			// d'avoir un pointeur null
 			stockNeigeForet = MexHelper::mhMxGetField(etatsFonte, 0, "stockNeigeForet");
 			etatFonteAssimCE.SNC_stockNeigeForetType = AssimilationHelper::obtenirTypeAssim(stockNeigeForet);

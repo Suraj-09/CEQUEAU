@@ -105,10 +105,10 @@ void mexFunction(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]) {
 			// FILE_LOG(logINFO) << ("MATLAB\n");
 			const char *name = mexFunctionName();
 			mex_file_name = name;
-			
+
 			fichierLog = (pathRepertoireLog + "/" + mex_file_name + ".log");
 		#endif
-		
+
 #ifndef SANS_LOG
 		FILE* log_fd = fopen(fichierLog.c_str(), "w");
 		Output2FILE::Stream() = log_fd;
@@ -132,11 +132,11 @@ void mexFunction(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]) {
 
 		FILE_LOG(logINFO) << "Initialisation des parametres";
 		parametres.initialiser(structExecution, structParamSimulation, bassinVersant.nbCarreauxEntiers(), bassinVersant.nbCarreauxPartiels());
-		
+
 		if (parametres.option().modulePompage > 0) {
 			mexPrintf("Attention: modulePompage est encore en phase de test. Utilisation avec précaution.\n");
 		}
-		
+
 		if (parametres.option().moduleOmbrage > 0) {
 			mexPrintf("Attention: moduleOmbrage est encore en phase de test. Utilisation avec précaution.\n");
 		}
@@ -350,7 +350,7 @@ void mexFunction(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[]) {
 
 		// Execution de la qualite
 		if (parametres.option().calculQualite) {
-			TODO: 
+			TODO:
 			if (parametres.dureeHeuresPasSimulation() < 24) {
 				mexPrintf("Attention: calculQualite avec pas de temps < 24h est encore en phase de test. Utilisation avec précaution.\n");
 			}

@@ -2,11 +2,11 @@
 // Fichier:  Station.cpp
 //
 // Date creation: 2013-05-13
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #include "stdafx.h"
@@ -47,16 +47,16 @@ void InterpolateurPonderationStations::calculerCorrections(int idxTypeMeteo, int
   float correction, diffAltitude, varTravail;
   float distanceStn1, distanceStn2, distanceStn3;
   DonneesCarreaux::iterator iterCE;
-  
+
   iterCE = donneesCarreauxTemps_[idxTypeMeteo][pasDeTemps].begin();
   while(iterCE != donneesCarreauxTemps_[idxTypeMeteo][pasDeTemps].end()) {
     diffAltitude = (iterCE->CE->altitude() - iterCE->calculerAltitudeMoyStation());
-    
+
     if (idxTypeMeteo == IDX_TEMPERATURE) {
       correction = diffAltitude * paramInterpolation_.coet() / 1000.0f;
     }
     else if (idxTypeMeteo == IDX_PRECIPITATION) {
-      correction = 1.0f + diffAltitude * paramInterpolation_.coep() * nbStation_ / 
+      correction = 1.0f + diffAltitude * paramInterpolation_.coep() * nbStation_ /
                            iterCE->calculerSommePrecipitaionStation();
     }
     else  {
@@ -82,7 +82,7 @@ void InterpolateurPonderationStations::calculerCorrections(int idxTypeMeteo, int
 //------------------------------------------------------------------
 void InterpolateurPonderationStations::interpoler(int pasDeTemps)
 {
- 
+
   // Boucle sur les pas de temps de la meteo des stations
   int nbCE = bassinVersant_.nbCarreauxEntiers(), idStation;
   int nbAutreMeteo = obtenirNombreAutreMeteo();
@@ -106,7 +106,7 @@ void InterpolateurPonderationStations::interpoler(int pasDeTemps)
       ponderationStation = donneesInterpolation->facteurPonderationCE[0];
       idStation = donneesInterpolation->stations[0].get()->id();
       meteo = meteoStations_.valeurs()[pasDeTemps][idStation].get();
-        
+
       if (idxMeteo == IDX_TEMPERATURE) {
         tMin += ponderationStation * meteo->tMin();
         tMax += ponderationStation * meteo->tMax();
@@ -121,11 +121,11 @@ void InterpolateurPonderationStations::interpoler(int pasDeTemps)
 
 
       for (int idxStation = 1; idxStation < 3; idxStation++) {
-        
+
         ponderationStation = donneesInterpolation->facteurPonderationCE[idxStation];
         idStation = donneesInterpolation->stations[idxStation].get()->id();
         meteo = meteoStations_.valeurs()[pasDeTemps][idStation].get();
-        
+
         if (idxMeteo == IDX_TEMPERATURE) {
           tMin += ponderationStation * (std::isnan(meteo->tMin()) ? 0.0f : meteo->tMin());
           tMax += ponderationStation * (std::isnan(meteo->tMax()) ? 0.0f : meteo->tMax());

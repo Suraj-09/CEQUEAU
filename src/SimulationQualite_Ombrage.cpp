@@ -488,7 +488,7 @@ double PositionSolaire::argument_latitude_moon(double jce)
 	return third_order_polynomial(1.0 / 327270.0, -0.0036825, 483202.017538, 93.27191, jce);
 }
 
-//! X_4 
+//! X_4
 double PositionSolaire::ascending_longitude_moon(double jce)
 {
 	return third_order_polynomial(1.0 / 450000.0, 0.0020708, -1934.136261, 125.04452, jce);

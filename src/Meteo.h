@@ -2,11 +2,11 @@
 // Fichier: Meteo.h
 //
 // Date creation: 2012-10-01
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #pragma once
@@ -45,17 +45,17 @@ public:
   float neige() const;
   //! Getter idCarreauEntier
   int   idCarreauEntier() const;
-  //! Getter donnees meteo specifique au modele de fonte 
+  //! Getter donnees meteo specifique au modele de fonte
   const std::vector<float>& meteoFonte() const;
-  //! Getter donnees meteo specifique au modele d'evapotranspiration 
+  //! Getter donnees meteo specifique au modele d'evapotranspiration
   const std::vector<float>& meteoEvapo() const;
   //! Getter donnees meteo autres (exemple: qualite)
   const std::vector<float>& meteoAutre() const;
   //! Setter idCarreauEntier
   void  idCarreauEntier(int idCarreauEntier);
-  //! Setter donnees meteo specifique au modele de fonte 
+  //! Setter donnees meteo specifique au modele de fonte
   void meteoFonte(const std::vector<float>& donneesMeteo);
-  //! Setter donnees meteo specifique au modele d'evapotranspiration 
+  //! Setter donnees meteo specifique au modele d'evapotranspiration
   void meteoEvapo(const std::vector<float>& donneesMeteo);
   //! Setter donnees meteo autres (exemple: qualite)
   void meteoAutre(const std::vector<float>& donneesMeteo);

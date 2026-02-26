@@ -10,23 +10,23 @@ Puits::Puits(int id, int active, double distance, double h0, double rayon, std::
       debitPompage(debit),
       niveauInitial(h0) {}
 
-int Puits::getIdCE() const { 
-    return idCE; 
+int Puits::getIdCE() const {
+    return idCE;
 }
 
-int Puits::getActive() const { 
-    return active; 
+int Puits::getActive() const {
+    return active;
 }
 
-double Puits::getDistanceRiviere() const { 
-    return distanceRiviere; 
+double Puits::getDistanceRiviere() const {
+    return distanceRiviere;
 }
 
-double Puits::getNiveauInitial() const { 
+double Puits::getNiveauInitial() const {
   return niveauInitial;
 }
 
-double Puits::getRayonP() const { 
+double Puits::getRayonP() const {
   return rayonP;
 }
 
@@ -39,14 +39,14 @@ const std::vector<double>& Puits::getDebitPompage() const {
 }
 
 double Puits::getNiveauPuitsParIndex(int idxPasDeTemps) const {
-  if (idxPasDeTemps < 0) 
+  if (idxPasDeTemps < 0)
     return 0;
 
   return niveauxPuits[idxPasDeTemps];
 }
 
 double Puits::getDebitPompageParIndex(int idxPasDeTemps) const {
-  if (idxPasDeTemps < 0) 
+  if (idxPasDeTemps < 0)
     return 0;
 
   return debitPompage[idxPasDeTemps];

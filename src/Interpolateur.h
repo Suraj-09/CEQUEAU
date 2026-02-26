@@ -2,11 +2,11 @@
 // Fichier:  Interpolation.h
 //
 // Date creation: 2013-05-13
-// Auteur: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Auteur:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
+//                G7S 4R7, QC, Canada
 //
 //****************************************************************************
 #pragma once
@@ -39,16 +39,16 @@ public:
   float calculerSommePrecipitaionStation();
 };
 
-// Liste des donnees necessaires pour interpoler la meteo a chaque CE 
+// Liste des donnees necessaires pour interpoler la meteo a chaque CE
 typedef std::vector<DonneesInterpolation> DonneesCarreaux;
 
 //! Classe Interpolation.
-class Interpolateur 
+class Interpolateur
 {
 public:
   //! Constructeur.
-  Interpolateur(const BassinVersant& bv, const ListeStation& stations, const Parametres& parametres, 
-                const ParametresInterpolation& paramInterpolation, const DonneesMeteo& meteoStations, 
+  Interpolateur(const BassinVersant& bv, const ListeStation& stations, const Parametres& parametres,
+                const ParametresInterpolation& paramInterpolation, const DonneesMeteo& meteoStations,
                 const std::vector<std::string>& nomsAutresMeteo, int nbStation);
   virtual ~Interpolateur();
 

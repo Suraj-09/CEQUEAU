@@ -2,17 +2,17 @@
 // Fichier: EvapoCequeau.cpp
 //
 // Creation date: 2014-04-09
-// Created by: 
-//                Rio Tinto Alcan                     
-//                Energie electrique                  
+// Created by:
+//                Rio Tinto Alcan
+//                Energie electrique
 //                1954 Davis, Saguenay arr. Jonquiere,
-//                G7S 4R7, QC, Canada                 
-// 
+//                G7S 4R7, QC, Canada
+//
 // Usage: Use this template to create you own snow melt module:
 //        1- Copy and paste EvapoCequeau.h and EvapoCequeau.cpp
-//        2- Rename the new files after your module name (please keep "Evapo" at the beginning). 
+//        2- Rename the new files after your module name (please keep "Evapo" at the beginning).
 //           Example: EvapoSomething.h and EvapoSomething.cpp
-//        3- Search for "// TODO New module" in the project. These are placeholders for you code.  
+//        3- Search for "// TODO New module" in the project. These are placeholders for you code.
 //           All methods MUST be implemented (see interface Evapo.h).
 //
 //****************************************************************************
@@ -27,7 +27,7 @@ EvapoCequeau::EvapoCequeau()
 //------------------------------------------------------------------
 EvapoCequeau::EvapoCequeau(int latitudeMoyenneBV, int nbCE, int pasParJour)
                            : Evapo(nbCE, "EvapoCequeau"), pasParJour_(pasParJour)
-{ 
+{
 
   int degresEnMinutes = (latitudeMoyenneBV / 100) * 60;
   int minutes = latitudeMoyenneBV % 100;
@@ -38,7 +38,7 @@ EvapoCequeau::EvapoCequeau(int latitudeMoyenneBV, int nbCE, int pasParJour)
   nomChamps_.push_back("Sol");
   nomChamps_.push_back("Nappe");
   nomChamps_.push_back("EauLibre");
-  nomChamps_.push_back("Potentielle"); 
+  nomChamps_.push_back("Potentielle");
 }
 
 //------------------------------------------------------------------
@@ -75,10 +75,10 @@ int EvapoCequeau::calculerEvapo(
   // telles que definies dans le manuel Cequeau.
 
   float TJE_tempMoy = meteo.calculerTempMoy();
-  
+
   float ARR27_coeffPonderation = carreauEntier.calculerCoeffPonderation();
   float HNAPS_seuilVidangeHauteNappe = carreauEntier.param().seuilVidangeHauteNappe;
- 
+
   float HN_niveauEauNappe = niveauEauNappe;
 
   float ETHORN_evapoPotJour = 0.0f;
@@ -89,31 +89,31 @@ int EvapoCequeau::calculerEvapo(
     float EVNAP_fractionEvapoNappe = params_.fractionEvapoNappe;
     ETRLAC_evapoReelleLac = 0.8f * ETHORN_evapoPotJour;
 	float ETOT_evapoPotSol = ETHORN_evapoPotJour * ARR27_coeffPonderation;
-    float evapoCalcul = 
-      minf(EVNAP_fractionEvapoNappe, 
+    float evapoCalcul =
+      minf(EVNAP_fractionEvapoNappe,
                       EVNAP_fractionEvapoNappe * HN_niveauEauNappe / (HNAPS_seuilVidangeHauteNappe + 25.4f));
 
     ETRNAP_evapoNappe = minf(HN_niveauEauNappe, ETOT_evapoPotSol * evapoCalcul);
     HN_niveauEauNappe = HN_niveauEauNappe - ETRNAP_evapoNappe;
     ETRSOL_evapoSol = ETOT_evapoPotSol - ETRNAP_evapoNappe;
   }
-  
+
   // New state preservation
   // TODO New module: Add your variables
   /*** Example***/
   etatEvapoCE_.stateSol = ETRSOL_evapoSol;
-  etatEvapoCE_.stateNappe = ETRNAP_evapoNappe; 
+  etatEvapoCE_.stateNappe = ETRNAP_evapoNappe;
   etatEvapoCE_.stateEauLibre = ETRLAC_evapoReelleLac;
-  etatEvapoCE_.statePot = ETHORN_evapoPotJour;  
+  etatEvapoCE_.statePot = ETHORN_evapoPotJour;
 
 
 
   //FILE_LOG(logINFO) << "idCE," << indexCE << ",stateSol," << ETRSOL_evapoSol << ",stateNappe," << ETRNAP_evapoNappe << ",stateEauLibre," << ETRLAC_evapoReelleLac << ",statePot," << ETHORN_evapoPotJour;
 
   etatsEvapoCE_.push_back(etatEvapoCE_);
-  
+
   // TODO New module: Your result
-  
+
   // resultats
   evapotranspirationSol = ETRSOL_evapoSol;
   evapotranspirationNappe = ETRNAP_evapoNappe;
@@ -148,10 +148,10 @@ int EvapoCequeau::assimiler(const DateChrono& datePasDeTemps)
           etatsSimules.push_back(*iterCE);
           // TODO New module: Your fields here
           /*** Example
-          AssimilationHelper::assimilerValeur(assimilationsIter->stateVar1, 
+          AssimilationHelper::assimilerValeur(assimilationsIter->stateVar1,
                           assimilationsIter->stateVar1Type, iterCE->stateVar1);
 
-          AssimilationHelper::assimilerValeur(assimilationsIter->stateVar2, 
+          AssimilationHelper::assimilerValeur(assimilationsIter->stateVar2,
                           assimilationsIter->stateVar2Type, iterCE->stateVar2);
 
           ***/
@@ -179,10 +179,10 @@ int EvapoCequeau::initialiserAssimilations(const mxArray* assimilations)
   if (assimilations == NULL) {
     return retCode;
   }
-    
+
   size_t nbDonnees, nbDonneesCE;
   mxArray *etatsEvapo, *idCE;
-  double pasDeTempsData, *idCEData; 
+  double pasDeTempsData, *idCEData;
   DateChrono datePasDeTemps;
   EtatEvapoAssimCE etatEvapoAssimCE;
   std::vector<EtatEvapoAssimCE> etatsEvapoAssimCE;
@@ -202,7 +202,7 @@ int EvapoCequeau::initialiserAssimilations(const mxArray* assimilations)
     datePasDeTemps = DateChrono::fromMatlabDatenum(pasDeTempsData);
 
     etatsEvapo = MexHelper::mhMxGetField(assimilations, i, "etatsEvapo");
-    
+
     /***** Carreaux Entiers *****/
     // Donnees d'assimilation relatives aux CE pour ce pas de temps d'assimilation
     if (mxGetNumberOfElements(etatsEvapo) > 0) {
@@ -210,10 +210,10 @@ int EvapoCequeau::initialiserAssimilations(const mxArray* assimilations)
       idCEData = MexHelper::mhMxGetPr(idCE, "id");
 
       // Obtention des pointeurs de donnees
-      // On utilise mxGetPr plutot que MexHelper::mhMxGetPr pour la possibilite 
+      // On utilise mxGetPr plutot que MexHelper::mhMxGetPr pour la possibilite
       // d'avoir un pointeur null
       // TODO New module: Your fields here.
-      /*** Example 
+      /*** Example
       stateVar1 = MexHelper::mhMxGetField(etatsEvapo, 0, "stateVar1");
       etatEvapoAssimCE.stateVar1Type = AssimilationHelper::obtenirTypeAssim(stateVar1);
       stateVar1Data = mxGetPr(stateVar1);
@@ -230,11 +230,11 @@ int EvapoCequeau::initialiserAssimilations(const mxArray* assimilations)
         etatEvapoAssimCE.idCarreauEntier = (int)idCEData[j];
 
         // TODO New module: Your fields here.
-        /*** Example 
-        AssimilationHelper::obtenirValeursAssim(stateVar1Data, etatEvapoAssimCE.stateVar1Type, 
+        /*** Example
+        AssimilationHelper::obtenirValeursAssim(stateVar1Data, etatEvapoAssimCE.stateVar1Type,
                             j, etatEvapoAssimCE.stateVar1);
 
-        AssimilationHelper::obtenirValeursAssim(stateVar2Data, etatEvapoAssimCE.stateVar2Type, 
+        AssimilationHelper::obtenirValeursAssim(stateVar2Data, etatEvapoAssimCE.stateVar2Type,
                             j, etatEvapoAssimCE.stateVar2);
         ***/
 
@@ -279,7 +279,7 @@ void EvapoCequeau::initialiserEtats(const mxArray* etatsInitiaux)
     mapChamps.insert(std::make_pair("stateVar1", &etatEvapoCE_.stateVar1));
     mapChamps.insert(std::make_pair("stateVar2", &etatEvapoCE_.stateVar2));
     ***/
-  
+
     mapChamps.insert(std::make_pair("Sol", &etatEvapoCE_.stateSol));
     mapChamps.insert(std::make_pair("Nappe", &etatEvapoCE_.stateNappe));
     mapChamps.insert(std::make_pair("EauLibre", &etatEvapoCE_.stateEauLibre));
@@ -290,7 +290,7 @@ void EvapoCequeau::initialiserEtats(const mxArray* etatsInitiaux)
     etatsEvapo_.push_back(etatsEvapoCE_);
   }
 }
-  
+
 //------------------------------------------------------------------
 void EvapoCequeau::lireParametres(const mxArray* paramsEvapo)
 {
@@ -328,19 +328,19 @@ double EvapoCequeau::calculerFacteurModulationSoleil(int noJour) const
   double diff = (double)(noJour - params_.jourSoleilMaxEvapo);
   double calcul = acos( -tan( asin( 0.409425f * sin( 0.0172f * diff ) ) ) * constModulationSoleil_) / 1.5708f;
 
-  return calcul; 
+  return calcul;
 }
 
 //------------------------------------------------------------------
 double EvapoCequeau::calculerEthorn(int noJour, float tempMoy) const
 {
-  //ETHORN=( (0.5329*HEUR1*(10.*TJE/XIT)**XAA) )/NPEPJ     
+  //ETHORN=( (0.5329*HEUR1*(10.*TJE/XIT)**XAA) )/NPEPJ
 
   double pasParJour = (double)pasParJour_;
   double XIT_indexThermiqueThornthwaite = params_.indexThermiqueThornthwaite;
   double XAA_exposantThornthwaite = params_.exposantThornthwaite;
 
-  double calcul = (0.5329f * calculerFacteurModulationSoleil(noJour) * 
+  double calcul = (0.5329f * calculerFacteurModulationSoleil(noJour) *
                  std::pow((10.0f * (double)tempMoy / XIT_indexThermiqueThornthwaite), XAA_exposantThornthwaite)) /
                  pasParJour;
 
